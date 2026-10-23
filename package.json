@@ -1,0 +1,21 @@
+{
+  "name": "ai-research-assistant",
+  "version": "1.0.0",
+  "description": "A full-stack application designed to assist in AI research, utilizing a decoupled architecture for scalability.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "build": "npm run build --prefix client",
+    "start": "node server/index.js",
+    "install-all": "npm install && npm --prefix server install && npm --prefix client install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "concurrently": "^10.0.5"
+  }
+}

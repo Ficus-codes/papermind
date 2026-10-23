@@ -1,0 +1,169 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: #bdbdbd;
+  --color-surface-light: #cfcfcf;
+  --color-surface-dark: #2b2b2b;
+  --color-surface-paper: #faf9f9;
+  --color-surface-white: #ffffff;
+  
+  --color-text-primary: #111111;
+  --color-text-secondary: #444444;
+  --color-text-muted: #666666;
+  --color-text-light: #f2f2f2;
+
+  --color-amber-accent: #ff9a2e;
+  --color-amber-radiance: #ffc15e;
+  --color-error-accent: #ba1a1a;
+  --color-border-hairline: rgba(0, 0, 0, 0.35);
+  --color-border-hairline-dark: rgba(255, 255, 255, 0.15);
+
+  /* Stitch Theme Design Tokens */
+  --color-outline-variant: #dbc2af;
+  --color-primary-fixed: #ffdcc1;
+  --color-on-tertiary-fixed-variant: #614000;
+  --color-surface-container-high: #e8e8e8;
+  --color-background: #faf9f9;
+  --color-on-primary-container: #693900;
+  --color-error-container: #ffdad6;
+  --color-surface-bright: #faf9f9;
+  --color-secondary-fixed: #e4e2e1;
+  --color-surface-variant: #e3e2e2;
+  --color-surface: #faf9f9;
+  --color-on-tertiary: #ffffff;
+  --color-on-secondary-container: #656464;
+  --color-on-secondary-fixed: #1b1c1c;
+  --color-surface-container-low: #f4f3f3;
+  --color-secondary: #5f5e5e;
+  --color-surface-container-highest: #e3e2e2;
+  --color-on-tertiary-container: #5e3e00;
+  --color-on-surface-variant: #554335;
+  --color-surface-dim: #dadada;
+  --color-on-secondary: #ffffff;
+  --color-primary-fixed-dim: #ffb877;
+  --color-error: #ba1a1a;
+  --color-secondary-container: #e4e2e1;
+  --color-tertiary-container: #e2a847;
+  --color-tertiary-fixed-dim: #f9bc59;
+  --color-primary: #8e4f00;
+  --color-secondary-fixed-dim: #c8c6c5;
+  --color-inverse-primary: #ffb877;
+  --color-inverse-on-surface: #f1f0f0;
+  --color-on-surface: #1a1c1c;
+  --color-surface-tint: #8e4f00;
+  --color-on-background: #1a1c1c;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #ff9a2e;
+  --color-tertiary-fixed: #ffddaf;
+  --color-on-primary-fixed: #2e1500;
+  --color-on-error-container: #93000a;
+  --color-surface-container: #eeeeed;
+  --color-on-secondary-fixed-variant: #474746;
+  --color-on-tertiary-fixed: #281800;
+  --color-outline: #887363;
+  --color-on-error: #ffffff;
+  --color-on-primary-fixed-variant: #6c3a00;
+  --color-tertiary: #805600;
+  --color-inverse-surface: #2f3131;
+
+  --spacing-margin: 2.5rem;
+  --spacing-margin-mobile: 1.25rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-gutter-mobile: 0.75rem;
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2.5rem;
+  --spacing-space-2xl: 4rem;
+
+  --font-sans: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Geist', 'Inter', -apple-system, sans-serif;
+  --font-counter-mono: 'JetBrains Mono', monospace;
+  --font-label-nav: 'Geist', 'Inter', sans-serif;
+  --font-headline-lg: 'Geist', sans-serif;
+  --font-headline-md: 'Geist', sans-serif;
+  --font-body-lg: 'Geist', sans-serif;
+  --font-body-md: 'Geist', sans-serif;
+  --font-caption: 'Geist', sans-serif;
+}
+
+@layer utilities {
+  .text-label-nav {
+    font-size: 11px;
+    line-height: 14px;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+  }
+  .text-counter-mono {
+    font-size: 11px;
+    line-height: 14px;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+  .text-caption {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.02em;
+    font-weight: 400;
+  }
+  .text-body-md {
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: 0em;
+    font-weight: 400;
+  }
+  .text-body-lg {
+    font-size: 17px;
+    line-height: 26px;
+    letter-spacing: -0.005em;
+    font-weight: 400;
+  }
+  .text-headline-md {
+    font-size: 22px;
+    line-height: 28px;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+  }
+  .text-headline-lg {
+    font-size: 38px;
+    line-height: 42px;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+  .text-display {
+    font-size: 56px;
+    line-height: 60px;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+  }
+}
+
+@layer base {
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    selection-background-color: #ff9a2e;
+    selection-color: #111111;
+  }
+}
+
+@keyframes citationGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 154, 46, 0.3);
+    border-color: rgba(255, 154, 46, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px 4px rgba(255, 154, 46, 0.35);
+    border-color: rgba(255, 154, 46, 1);
+  }
+}
+
+.animate-citation-glow {
+  animation: citationGlow 2.2s ease-in-out infinite;
+}
+

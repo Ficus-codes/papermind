@@ -1,0 +1,206 @@
+/* PAPERMIND DESIGN SYSTEM (Generated from Google Stitch Project 3601931371115488755)
+   Swiss Modernism & Architectural Editorial:
+   - Primary surface (#FAF9F9), raised panels (#F4F3F3, #E8E8E8), dark monoliths (#2F3131)
+   - 1px hairline dividers (border-outline-variant / rgba(26, 28, 28, 0.18))
+   - Amber ignition accent (#FF9A2E) with soft ambient radiance bloom
+   - Full pill buttons (9999px) contrasting with sharp matrix gridlines
+*/
+
+:root {
+  --canvas-base: #faf9f9;
+  --surface-light: #f4f3f3;
+  --surface-panel: #eeeeed;
+  --surface-high: #e8e8e8;
+  --surface-dark: #2f3131;
+  --surface-paper: #faf9f9;
+  --surface-white: #ffffff;
+  --text-primary: #1a1c1c;
+  --text-secondary: #5f5e5e;
+  --text-muted: #887363;
+  --text-light: #ffffff;
+  --accent-ignition: #ff9a2e;
+  --accent-radiance: #ffc15e;
+  --hairline: rgba(26, 28, 28, 0.18);
+  --hairline-border: #dbc2af;
+  --hairline-dark: rgba(255, 255, 255, 0.15);
+  --error: #ba1a1a;
+}
+
+/* Typography Helpers */
+.font-display {
+  font-family: 'Geist', 'Inter', -apple-system, sans-serif;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+}
+
+.font-nav-label {
+  font-family: 'Geist', 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.font-mono-counter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Buttons */
+.btn-primary, .btn-monolith {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 24px;
+  background-color: var(--surface-dark);
+  color: #ffffff;
+  border-radius: 9999px;
+  font-family: 'Geist', 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.btn-primary:hover:not(:disabled), .btn-monolith:hover:not(:disabled) {
+  background-color: #8e4f00;
+  border-color: #8e4f00;
+  box-shadow: 0 0 16px rgba(142, 79, 0, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-secondary, .btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 20px;
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid rgba(26, 28, 28, 0.25);
+  border-radius: 9999px;
+  font-family: 'Geist', 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.btn-secondary:hover:not(:disabled), .btn-ghost:hover:not(:disabled) {
+  background-color: var(--surface-light);
+  border-color: rgba(26, 28, 28, 0.5);
+}
+
+.btn-ignition {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 24px;
+  background-color: var(--accent-ignition);
+  color: #1a1c1c;
+  border-radius: 9999px;
+  font-family: 'Geist', 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(255, 193, 94, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.btn-ignition:hover:not(:disabled) {
+  background-color: #ffaa48;
+  box-shadow: 0 0 28px rgba(255, 193, 94, 0.65);
+  transform: translateY(-1px);
+}
+
+/* Citation & Metadata Chips */
+.citation-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 9999px;
+  background-color: rgba(255, 154, 46, 0.15);
+  border: 1px solid rgba(255, 154, 46, 0.5);
+  color: #8e4f00;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.citation-chip:hover {
+  background-color: var(--accent-ignition);
+  color: #1a1c1c;
+  border-color: var(--accent-ignition);
+}
+
+/* Hairline matrix cells */
+.hairline-matrix {
+  border-right: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* Status beacons */
+.beacon-amber {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: var(--accent-ignition);
+  box-shadow: 0 0 8px var(--accent-ignition);
+  animation: pulse-beacon 2s infinite ease-in-out;
+}
+
+@keyframes pulse-beacon {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+/* Radiant glow */
+.radiant-amber {
+  box-shadow: 0 0 32px 0 rgba(255, 154, 46, 0.28);
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(26, 28, 28, 0.18);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(26, 28, 28, 0.35);
+}
