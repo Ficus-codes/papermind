@@ -568,88 +568,64 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
         {/* ======================= TAB 1: PROFILE ======================= */}
         {activeTab === 'PROFILE' && (
           <form onSubmit={handleSaveProfile} className="space-y-8">
-            {/* Identity Card */}
-            <div className="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-6 sm:p-8 space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-outline-variant/20">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-2xl bg-inverse-surface text-surface flex items-center justify-center font-display text-2xl font-bold tracking-tight shadow-sm shrink-0">
+            {/* Identity Summary Card */}
+            <div className="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-5 sm:p-7 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-outline-variant/20">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-12 h-12 rounded-xl bg-inverse-surface text-surface flex items-center justify-center font-display text-lg font-bold tracking-tight shadow-xs shrink-0">
                     {initials}
                   </div>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2.5 flex-wrap">
-                      <h2 className="font-display text-xl text-on-surface font-semibold">
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h2 className="font-display text-lg sm:text-xl text-on-surface font-semibold">
                         {name || 'Researcher'}
                       </h2>
-                      <span className="font-mono text-[10px] bg-primary-container/20 text-primary-container border border-primary-container/40 px-2.5 py-0.5 rounded-full font-semibold">
+                      <span className="font-mono text-[10px] bg-primary-container/15 text-primary-container border border-primary-container/30 px-2 py-0.5 rounded font-medium">
                         {academicRole}
                       </span>
-                      {age && (
-                        <span className="font-mono text-[10px] bg-surface-container text-on-surface-variant border border-outline-variant/40 px-2 py-0.5 rounded-full">
-                          AGE: {age}
-                        </span>
-                      )}
                     </div>
-                    <p className="text-xs font-mono text-on-surface-variant">
-                      {email} · <span className="text-emerald-500 font-semibold">● VERIFIED NODE</span> · {researchField}
+                    <p className="text-xs font-mono text-on-surface-variant/80">
+                      {email} · <span className="text-emerald-500 font-medium">Verified Researcher</span>
                     </p>
                   </div>
                 </div>
 
-                <div className="sm:text-right font-mono text-[11px] text-on-surface-variant/70 border sm:border-0 border-outline-variant/20 rounded-xl p-2 sm:p-0">
-                  <span className="text-secondary block font-bold uppercase tracking-wider text-[10px]">
-                    NODE CREDENTIALS
-                  </span>
-                  <span>{affiliation || 'Independent Lab'}</span>
+                <div className="font-mono text-xs text-on-surface-variant/80">
+                  <span>{affiliation || 'Independent Scholar'}</span>
                 </div>
               </div>
 
               {/* Form Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
                 {/* 1. Full Name */}
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-[11px] font-mono uppercase tracking-wider text-secondary flex items-center gap-1.5">
-                      <span>FULL NAME / TITLE</span>
-                      <span className="text-primary-container font-bold">*</span>
-                    </label>
-                    <span className="font-mono text-[9px] text-on-surface-variant/70 tracking-wider">
-                      LETTERS & TITLES ONLY
-                    </span>
-                  </div>
+                  <label className="block text-xs font-medium text-on-surface mb-1.5">
+                    Full Name <span className="text-primary-container">*</span>
+                  </label>
                   <input
                     type="text"
                     value={name}
                     onChange={handleNameChange}
                     placeholder="e.g. Dr. Eleanor Vance"
-                    className={`w-full bg-surface border rounded-xl px-4 py-2.5 text-sm text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
+                    className={`w-full bg-surface border rounded-xl px-3.5 py-2.5 text-sm text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
                       fieldErrors.name
                         ? 'border-error ring-1 ring-error text-error'
                         : 'border-outline-variant/40 focus:border-primary-container focus:ring-1 focus:ring-primary-container'
                     }`}
                     required
                   />
-                  {fieldErrors.name ? (
-                    <p className="text-[11px] text-error font-mono mt-1.5 flex items-center gap-1">
+                  {fieldErrors.name && (
+                    <p className="text-[11px] text-error font-mono mt-1 flex items-center gap-1">
                       <span>✕</span> {fieldErrors.name}
-                    </p>
-                  ) : (
-                    <p className="text-[11px] text-on-surface-variant/70 mt-1.5">
-                      Displayed on manuscripts, analytical briefs, and annotations.
                     </p>
                   )}
                 </div>
 
                 {/* 2. Age (Strict numeric input) */}
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-[11px] font-mono uppercase tracking-wider text-secondary flex items-center gap-1.5">
-                      <span>RESEARCHER AGE</span>
-                      <span className="text-primary-container font-bold">*</span>
-                    </label>
-                    <span className="font-mono text-[9px] bg-primary-container/10 text-primary-container px-2 py-0.5 rounded font-bold tracking-wider">
-                      NUMBERS ONLY · 18-120
-                    </span>
-                  </div>
+                  <label className="block text-xs font-medium text-on-surface mb-1.5">
+                    Age <span className="text-primary-container">*</span>
+                  </label>
                   <div className="relative">
                     <input
                       type="text"
@@ -659,38 +635,29 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                       value={age}
                       onChange={handleAgeChange}
                       placeholder="e.g. 34"
-                      className={`w-full bg-surface border rounded-xl px-4 py-2.5 text-sm font-mono text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
+                      className={`w-full bg-surface border rounded-xl px-3.5 py-2.5 text-sm font-mono text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
                         fieldErrors.age
                           ? 'border-error ring-1 ring-error text-error'
                           : 'border-outline-variant/40 focus:border-primary-container focus:ring-1 focus:ring-primary-container'
                       }`}
                       required
                     />
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-xs font-mono text-on-surface-variant/60">
-                      YRS
+                    <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-xs font-mono text-on-surface-variant/50">
+                      yrs
                     </div>
                   </div>
-                  {fieldErrors.age ? (
-                    <p className="text-[11px] text-error font-mono mt-1.5 flex items-center gap-1">
+                  {fieldErrors.age && (
+                    <p className="text-[11px] text-error font-mono mt-1 flex items-center gap-1">
                       <span>✕</span> {fieldErrors.age}
-                    </p>
-                  ) : (
-                    <p className="text-[11px] text-on-surface-variant/70 mt-1.5">
-                      Strict numeric entry. Letters, decimals, and negative values are rejected.
                     </p>
                   )}
                 </div>
 
                 {/* 3. Institutional Affiliation */}
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-[11px] font-mono uppercase tracking-wider text-secondary">
-                      INSTITUTIONAL AFFILIATION
-                    </label>
-                    <span className="font-mono text-[9px] text-on-surface-variant/70 tracking-wider">
-                      LAB / UNIVERSITY
-                    </span>
-                  </div>
+                  <label className="block text-xs font-medium text-on-surface mb-1.5">
+                    Institutional Affiliation
+                  </label>
                   <input
                     type="text"
                     value={affiliation}
@@ -698,34 +665,25 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                       setAffiliation(e.target.value);
                       if (fieldErrors.affiliation) setFieldErrors((prev) => ({ ...prev, affiliation: undefined }));
                     }}
-                    placeholder="e.g. Oxford Institute of AI & Cognitive Sciences"
-                    className="w-full bg-surface border border-outline-variant/40 rounded-xl px-4 py-2.5 text-sm text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all"
+                    placeholder="e.g. Oxford Institute or Independent Lab"
+                    className="w-full bg-surface border border-outline-variant/40 rounded-xl px-3.5 py-2.5 text-sm text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all"
                   />
-                  {fieldErrors.affiliation ? (
-                    <p className="text-[11px] text-error font-mono mt-1.5 flex items-center gap-1">
+                  {fieldErrors.affiliation && (
+                    <p className="text-[11px] text-error font-mono mt-1 flex items-center gap-1">
                       <span>✕</span> {fieldErrors.affiliation}
-                    </p>
-                  ) : (
-                    <p className="text-[11px] text-on-surface-variant/70 mt-1.5">
-                      Primary research facility, department, or academic host node.
                     </p>
                   )}
                 </div>
 
                 {/* 4. Academic Role / Position */}
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-[11px] font-mono uppercase tracking-wider text-secondary">
-                      ACADEMIC ROLE / POSITION
-                    </label>
-                    <span className="font-mono text-[9px] text-on-surface-variant/70 tracking-wider">
-                      STANDARDIZED
-                    </span>
-                  </div>
+                  <label className="block text-xs font-medium text-on-surface mb-1.5">
+                    Academic Role
+                  </label>
                   <select
                     value={academicRole}
                     onChange={(e) => setAcademicRole(e.target.value)}
-                    className="w-full bg-surface border border-outline-variant/40 rounded-xl px-4 py-2.5 text-sm font-sans text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all cursor-pointer"
+                    className="w-full bg-surface border border-outline-variant/40 rounded-xl px-3.5 py-2.5 text-sm font-sans text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all cursor-pointer"
                   >
                     <option value="Principal Investigator (PI)">Principal Investigator (PI)</option>
                     <option value="Senior Researcher / Scientist">Senior Researcher / Scientist</option>
@@ -735,25 +693,17 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                     <option value="Graduate Student">Graduate Student</option>
                     <option value="Independent Scholar">Independent Scholar</option>
                   </select>
-                  <p className="text-[11px] text-on-surface-variant/70 mt-1.5">
-                    Defines authorship tier and telemetry identity in collaboration matrix.
-                  </p>
                 </div>
 
                 {/* 5. Primary Research Field */}
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-[11px] font-mono uppercase tracking-wider text-secondary">
-                      PRIMARY RESEARCH FIELD
-                    </label>
-                    <span className="font-mono text-[9px] text-on-surface-variant/70 tracking-wider">
-                      TAXONOMY
-                    </span>
-                  </div>
+                  <label className="block text-xs font-medium text-on-surface mb-1.5">
+                    Primary Research Field
+                  </label>
                   <select
                     value={researchField}
                     onChange={(e) => setResearchField(e.target.value)}
-                    className="w-full bg-surface border border-outline-variant/40 rounded-xl px-4 py-2.5 text-sm font-sans text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all cursor-pointer"
+                    className="w-full bg-surface border border-outline-variant/40 rounded-xl px-3.5 py-2.5 text-sm font-sans text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all cursor-pointer"
                   >
                     <option value="Artificial Intelligence & Machine Learning">Artificial Intelligence & Machine Learning</option>
                     <option value="Natural Language Processing (NLP)">Natural Language Processing (NLP)</option>
@@ -764,110 +714,84 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                     <option value="Quantum Computing & Information">Quantum Computing & Information</option>
                     <option value="Other / Interdisciplinary AI">Other / Interdisciplinary AI</option>
                   </select>
-                  <p className="text-[11px] text-on-surface-variant/70 mt-1.5">
-                    Informs semantic clustering and citation relevance ranking.
-                  </p>
                 </div>
 
-                {/* 6. ORCID iD (Strict Format) */}
+                {/* 6. ORCID iD */}
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-[11px] font-mono uppercase tracking-wider text-secondary">
-                      ORCID iD
-                    </label>
-                    <span className="font-mono text-[9px] bg-surface-container text-on-surface-variant px-2 py-0.5 rounded tracking-wider border border-outline-variant/30">
-                      0000-0000-0000-0000
-                    </span>
-                  </div>
+                  <label className="block text-xs font-medium text-on-surface mb-1.5">
+                    ORCID iD
+                  </label>
                   <input
                     type="text"
                     maxLength={19}
                     value={orcid}
                     onChange={handleOrcidChange}
                     placeholder="0000-0002-1825-0097"
-                    className={`w-full bg-surface border rounded-xl px-4 py-2.5 text-sm font-mono text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
+                    className={`w-full bg-surface border rounded-xl px-3.5 py-2.5 text-sm font-mono text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
                       fieldErrors.orcid
                         ? 'border-error ring-1 ring-error text-error'
                         : 'border-outline-variant/40 focus:border-primary-container focus:ring-1 focus:ring-primary-container'
                     }`}
                   />
-                  {fieldErrors.orcid ? (
-                    <p className="text-[11px] text-error font-mono mt-1.5 flex items-center gap-1">
+                  {fieldErrors.orcid && (
+                    <p className="text-[11px] text-error font-mono mt-1 flex items-center gap-1">
                       <span>✕</span> {fieldErrors.orcid}
-                    </p>
-                  ) : (
-                    <p className="text-[11px] text-on-surface-variant/70 mt-1.5">
-                      16-digit Open Researcher Contributor ID. Automatically formats hyphens.
                     </p>
                   )}
                 </div>
 
-                {/* 7. Contact Phone (Strict dialing characters) */}
+                {/* 7. Contact Phone */}
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-[11px] font-mono uppercase tracking-wider text-secondary">
-                      CONTACT PHONE / EXTENSION
-                    </label>
-                    <span className="font-mono text-[9px] text-on-surface-variant/70 tracking-wider">
-                      7-15 DIGITS
-                    </span>
-                  </div>
+                  <label className="block text-xs font-medium text-on-surface mb-1.5">
+                    Phone / Extension
+                  </label>
                   <input
                     type="tel"
                     value={phone}
                     onChange={handlePhoneChange}
                     placeholder="+1 (555) 234-5678"
-                    className={`w-full bg-surface border rounded-xl px-4 py-2.5 text-sm font-mono text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
+                    className={`w-full bg-surface border rounded-xl px-3.5 py-2.5 text-sm font-mono text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
                       fieldErrors.phone
                         ? 'border-error ring-1 ring-error text-error'
                         : 'border-outline-variant/40 focus:border-primary-container focus:ring-1 focus:ring-primary-container'
                     }`}
                   />
-                  {fieldErrors.phone ? (
-                    <p className="text-[11px] text-error font-mono mt-1.5 flex items-center gap-1">
+                  {fieldErrors.phone && (
+                    <p className="text-[11px] text-error font-mono mt-1 flex items-center gap-1">
                       <span>✕</span> {fieldErrors.phone}
-                    </p>
-                  ) : (
-                    <p className="text-[11px] text-on-surface-variant/70 mt-1.5">
-                      Only numbers and international dialing characters (+, -, parentheses) accepted.
                     </p>
                   )}
                 </div>
 
                 {/* 8. Authenticated Email Address (Read-Only) */}
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-[11px] font-mono uppercase tracking-wider text-secondary">
-                      AUTHENTICATED EMAIL ADDRESS (READ-ONLY)
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs font-medium text-on-surface">
+                      Email Address
                     </label>
-                    <span className="text-[9px] font-mono text-primary-container bg-primary-container/10 px-2 py-0.5 rounded font-bold">
-                      PRIMARY KEY
+                    <span className="text-[10px] font-mono text-on-surface-variant/60">
+                      Read-only
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="email"
-                      value={email}
-                      disabled
-                      className="flex-1 bg-surface-container border border-outline-variant/30 rounded-xl px-4 py-2.5 text-sm font-mono text-on-surface-variant opacity-80 cursor-not-allowed"
-                    />
-                  </div>
-                  <p className="text-[11px] text-on-surface-variant/70 mt-1.5">
-                    Cryptographic node identifier. Contact cluster administrator to change.
-                  </p>
+                  <input
+                    type="email"
+                    value={email}
+                    disabled
+                    className="w-full bg-surface-container border border-outline-variant/30 rounded-xl px-3.5 py-2.5 text-sm font-mono text-on-surface-variant opacity-80 cursor-not-allowed"
+                  />
                 </div>
               </div>
 
               {/* 9. Bio / Statement (with character counter) */}
-              <div className="pt-2">
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-[11px] font-mono uppercase tracking-wider text-secondary">
-                    RESEARCH STATEMENT / BIO
+              <div className="pt-1">
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-xs font-medium text-on-surface">
+                    Research Statement / Bio
                   </label>
                   <span className={`font-mono text-[10px] ${
-                    bio.length >= 280 ? 'text-amber-500 font-bold' : 'text-on-surface-variant/70'
+                    bio.length >= 280 ? 'text-amber-500 font-bold' : 'text-on-surface-variant/60'
                   }`}>
-                    {bio.length} / 300 CHARACTERS
+                    {bio.length} / 300
                   </span>
                 </div>
                 <textarea
@@ -875,20 +799,16 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                   maxLength={300}
                   value={bio}
                   onChange={handleBioChange}
-                  placeholder="Summarize your primary scientific focus, current hypotheses, and analytical methodologies..."
+                  placeholder="Summarize your primary scientific focus, hypotheses, and methodologies..."
                   className={`w-full bg-surface border rounded-xl p-3 text-sm text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all resize-none ${
                     fieldErrors.bio
                       ? 'border-error ring-1 ring-error text-error'
                       : 'border-outline-variant/40 focus:border-primary-container focus:ring-1 focus:ring-primary-container'
                   }`}
                 />
-                {fieldErrors.bio ? (
-                  <p className="text-[11px] text-error font-mono mt-1.5 flex items-center gap-1">
+                {fieldErrors.bio && (
+                  <p className="text-[11px] text-error font-mono mt-1 flex items-center gap-1">
                     <span>✕</span> {fieldErrors.bio}
-                  </p>
-                ) : (
-                  <p className="text-[11px] text-on-surface-variant/70 mt-1.5">
-                    Concise academic summary shared in institutional exports and collaboration packets.
                   </p>
                 )}
               </div>
@@ -935,80 +855,73 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
         {/* ======================= TAB 2: PREFERENCES ======================= */}
         {activeTab === 'PREFERENCES' && (
           <div className="space-y-6">
-            <div className="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-6 sm:p-8 space-y-6">
+            <div className="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-5 sm:p-7 space-y-6">
               <div>
-                <h2 className="font-display text-xl text-on-surface font-semibold">
-                  RESEARCH WORKFLOW DEFAULTS
+                <h2 className="font-display text-lg sm:text-xl text-on-surface font-semibold">
+                  Workflow Preferences
                 </h2>
-                <p className="text-xs text-on-surface-variant mt-1">
-                  Customize citation formats, AI synthesis pipelines, and interface responsiveness.
+                <p className="text-xs text-on-surface-variant/80 mt-0.5">
+                  Customize citation formats, briefing depth, and view layout.
                 </p>
               </div>
 
-              <div className="space-y-6 divide-y divide-outline-variant/20 pt-2">
+              <div className="space-y-4 divide-y divide-outline-variant/20 pt-1">
                 {/* Setting 1: Citation Standard */}
-                <div className="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="space-y-1">
+                <div className="pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="space-y-0.5">
                     <span className="font-medium text-sm text-on-surface block">
                       Default Citation Format
                     </span>
-                    <p className="text-xs text-on-surface-variant">
-                      Bibliographic reference standard applied across exports and paper detail views.
+                    <p className="text-xs text-on-surface-variant/70">
+                      Standard format used for reference exports and citations.
                     </p>
                   </div>
-                  <div className="w-full sm:w-64">
+                  <div className="w-full sm:w-56">
                     <select
                       value={citationStyle}
                       onChange={(e) => setCitationStyle(e.target.value)}
-                      className="w-full bg-surface border border-outline-variant/40 rounded-xl px-4 py-2.5 text-xs font-mono text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container cursor-pointer transition-all"
+                      className="w-full bg-surface border border-outline-variant/40 rounded-xl px-3.5 py-2 text-xs font-mono text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container cursor-pointer transition-all"
                     >
                       <option value="APA">APA 7th Edition</option>
                       <option value="IEEE">IEEE Reference Style</option>
                       <option value="NATURE">Nature / Science Style</option>
                       <option value="CHICAGO">Chicago Manual of Style</option>
-                      <option value="BIBTEX">Raw BibTeX Format</option>
+                      <option value="BIBTEX">BibTeX Format</option>
                     </select>
                   </div>
                 </div>
 
                 {/* Setting 2: Analytical Synthesis Depth */}
-                <div className="pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="space-y-1 max-w-lg">
+                <div className="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="space-y-0.5 max-w-lg">
                     <span className="font-medium text-sm text-on-surface block">
-                      Synthesis Briefing Profile
+                      Synthesis Briefing Depth
                     </span>
-                    <p className="text-xs text-on-surface-variant">
-                      Defines structural detail and reasoning granularity for automatic paper briefings.
+                    <p className="text-xs text-on-surface-variant/70">
+                      Granularity for automated manuscript summaries.
                     </p>
                   </div>
                   <div className="w-full sm:w-64">
                     <select
                       value={synthesisDepth}
                       onChange={(e) => setSynthesisDepth(e.target.value)}
-                      className="w-full bg-surface border border-outline-variant/40 rounded-xl px-4 py-2.5 text-xs font-mono text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container cursor-pointer transition-all"
+                      className="w-full bg-surface border border-outline-variant/40 rounded-xl px-3.5 py-2 text-xs font-mono text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container cursor-pointer transition-all"
                     >
-                      <option value="THREE_PILLAR">3-Pillar Analysis (Problem, Solution, Impact)</option>
-                      <option value="EXECUTIVE">Executive Abstract (High-Speed Summary)</option>
-                      <option value="TECHNICAL">Technical Deep-Dive (Methodology & Bounds)</option>
+                      <option value="THREE_PILLAR">3-Pillar (Problem, Solution, Impact)</option>
+                      <option value="EXECUTIVE">Executive Abstract (High-Speed)</option>
+                      <option value="TECHNICAL">Technical Deep-Dive (Methodology)</option>
                     </select>
                   </div>
                 </div>
 
                 {/* Setting 3: Auto Summarization */}
-                <div className="pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="space-y-1 max-w-lg">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm text-on-surface block">
-                        Automatic Ingestion Briefing
-                      </span>
-                      {autoSummarize && (
-                        <span className="font-mono text-[9px] bg-primary-container/20 text-primary-container px-2 py-0.5 rounded font-bold">
-                          ACTIVE
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-xs text-on-surface-variant">
-                      Generate structured scientific briefings immediately after chunking and vectorizing manuscripts.
+                <div className="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="space-y-0.5 max-w-lg">
+                    <span className="font-medium text-sm text-on-surface block">
+                      Automatic Ingestion Briefings
+                    </span>
+                    <p className="text-xs text-on-surface-variant/70">
+                      Generate structured AI briefing immediately upon upload.
                     </p>
                   </div>
                   <button
@@ -1016,29 +929,22 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                     role="switch"
                     aria-checked={autoSummarize}
                     onClick={() => setAutoSummarize(!autoSummarize)}
-                    className={`w-14 h-7 rounded-full transition-colors duration-200 p-0.5 flex items-center cursor-pointer shadow-inner ${
+                    className={`w-12 h-6 rounded-full transition-colors duration-200 p-0.5 flex items-center cursor-pointer shadow-inner ${
                       autoSummarize ? 'bg-primary-container justify-end' : 'bg-surface-container-high justify-start'
                     }`}
                   >
-                    <span className="w-6 h-6 rounded-full bg-surface shadow-md transition-transform" />
+                    <span className="w-5 h-5 rounded-full bg-surface shadow-md transition-transform" />
                   </button>
                 </div>
 
                 {/* Setting 4: Citation Graph Physics */}
-                <div className="pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="space-y-1 max-w-lg">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm text-on-surface block">
-                        Hardware Verlet Spring Physics
-                      </span>
-                      {graphPhysics && (
-                        <span className="font-mono text-[9px] bg-primary-container/20 text-primary-container px-2 py-0.5 rounded font-bold">
-                          60 FPS
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-xs text-on-surface-variant">
-                      Enable real-time spring relaxation and smooth kinetic orbiting in the Citation Topology Graph.
+                <div className="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="space-y-0.5 max-w-lg">
+                    <span className="font-medium text-sm text-on-surface block">
+                      Kinetic Graph Physics
+                    </span>
+                    <p className="text-xs text-on-surface-variant/70">
+                      Enable real-time spring relaxation in Citation Graph.
                     </p>
                   </div>
                   <button
@@ -1046,22 +952,22 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                     role="switch"
                     aria-checked={graphPhysics}
                     onClick={() => setGraphPhysics(!graphPhysics)}
-                    className={`w-14 h-7 rounded-full transition-colors duration-200 p-0.5 flex items-center cursor-pointer shadow-inner ${
+                    className={`w-12 h-6 rounded-full transition-colors duration-200 p-0.5 flex items-center cursor-pointer shadow-inner ${
                       graphPhysics ? 'bg-primary-container justify-end' : 'bg-surface-container-high justify-start'
                     }`}
                   >
-                    <span className="w-6 h-6 rounded-full bg-surface shadow-md transition-transform" />
+                    <span className="w-5 h-5 rounded-full bg-surface shadow-md transition-transform" />
                   </button>
                 </div>
 
                 {/* Setting 5: Compact Document List */}
-                <div className="pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="space-y-1 max-w-lg">
+                <div className="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="space-y-0.5 max-w-lg">
                     <span className="font-medium text-sm text-on-surface block">
-                      High-Density Library Grid
+                      Compact Library Layout
                     </span>
-                    <p className="text-xs text-on-surface-variant">
-                      Display manuscript records with reduced whitespace padding for dense archive browsing.
+                    <p className="text-xs text-on-surface-variant/70">
+                      Display paper cards with higher information density.
                     </p>
                   </div>
                   <button
@@ -1069,11 +975,11 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                     role="switch"
                     aria-checked={compactView}
                     onClick={() => setCompactView(!compactView)}
-                    className={`w-14 h-7 rounded-full transition-colors duration-200 p-0.5 flex items-center cursor-pointer shadow-inner ${
+                    className={`w-12 h-6 rounded-full transition-colors duration-200 p-0.5 flex items-center cursor-pointer shadow-inner ${
                       compactView ? 'bg-primary-container justify-end' : 'bg-surface-container-high justify-start'
                     }`}
                   >
-                    <span className="w-6 h-6 rounded-full bg-surface shadow-md transition-transform" />
+                    <span className="w-5 h-5 rounded-full bg-surface shadow-md transition-transform" />
                   </button>
                 </div>
               </div>
@@ -1083,14 +989,14 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
               <button
                 type="button"
                 onClick={handleResetPreferences}
-                className="btn-ghost !h-11 !px-5 !text-xs cursor-pointer border border-outline-variant/40"
+                className="btn-ghost !h-10 !px-4 !text-xs cursor-pointer border border-outline-variant/40"
               >
                 RESET TO DEFAULTS
               </button>
               <button
                 type="button"
                 onClick={handleSavePreferences}
-                className="btn-primary !h-11 !px-8 cursor-pointer shadow-sm"
+                className="btn-primary !h-10 !px-6 cursor-pointer shadow-sm text-xs"
               >
                 SAVE PREFERENCES
               </button>
@@ -1102,13 +1008,13 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
         {activeTab === 'SECURITY' && (
           <div className="space-y-8">
             <form onSubmit={handleChangePassword} className="space-y-6">
-              <div className="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-6 sm:p-8 space-y-6">
+              <div className="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-5 sm:p-7 space-y-6">
                 <div>
-                  <h2 className="font-display text-xl text-on-surface font-semibold">
-                    AUTHENTICATION CREDENTIALS
+                  <h2 className="font-display text-lg sm:text-xl text-on-surface font-semibold">
+                    Security & Authentication
                   </h2>
-                  <p className="text-xs text-on-surface-variant mt-1">
-                    Update your account password. Strong passwords contain at least 8 characters with numbers or symbols.
+                  <p className="text-xs text-on-surface-variant/80 mt-0.5">
+                    Update your account password with at least 8 secure characters.
                   </p>
                 </div>
 
@@ -1139,21 +1045,12 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-2">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 pt-1">
                   {/* Current Password Field */}
                   <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <label className="block text-[11px] font-mono uppercase tracking-wider text-secondary">
-                        CURRENT PASSWORD
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => setShowCurrentPass(!showCurrentPass)}
-                        className="font-mono text-[10px] text-on-surface-variant hover:text-on-surface cursor-pointer select-none transition-colors"
-                      >
-                        {showCurrentPass ? 'HIDE' : 'SHOW'}
-                      </button>
-                    </div>
+                    <label className="block text-xs font-medium text-on-surface mb-1.5">
+                      Current Password
+                    </label>
                     <div className="relative">
                       <input
                         type={showCurrentPass ? 'text' : 'password'}
@@ -1162,14 +1059,14 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                           setCurrentPassword(e.target.value);
                           if (securityFeedback) setSecurityFeedback(null);
                         }}
-                        placeholder={showCurrentPass ? 'Enter current password' : '••••••••'}
-                        className="w-full bg-surface border border-outline-variant/40 rounded-xl px-4 py-2.5 text-sm text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all pr-10 font-mono"
+                        placeholder={showCurrentPass ? 'Current password' : '••••••••'}
+                        className="w-full bg-surface border border-outline-variant/40 rounded-xl px-3.5 py-2.5 text-sm text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all pr-10 font-mono"
                         required
                       />
                       <button
                         type="button"
                         onClick={() => setShowCurrentPass(!showCurrentPass)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-on-surface p-1 cursor-pointer transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant/70 hover:text-on-surface p-1 cursor-pointer transition-colors"
                         title={showCurrentPass ? 'Hide password' : 'Show password'}
                       >
                         {showCurrentPass ? (
@@ -1188,18 +1085,9 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
 
                   {/* New Password Field */}
                   <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <label className="block text-[11px] font-mono uppercase tracking-wider text-secondary">
-                        NEW PASSWORD
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => setShowNewPass(!showNewPass)}
-                        className="font-mono text-[10px] text-on-surface-variant hover:text-on-surface cursor-pointer select-none transition-colors"
-                      >
-                        {showNewPass ? 'HIDE' : 'SHOW'}
-                      </button>
-                    </div>
+                    <label className="block text-xs font-medium text-on-surface mb-1.5">
+                      New Password
+                    </label>
                     <div className="relative">
                       <input
                         type={showNewPass ? 'text' : 'password'}
@@ -1208,14 +1096,14 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                           setNewPassword(e.target.value);
                           if (securityFeedback) setSecurityFeedback(null);
                         }}
-                        placeholder={showNewPass ? 'Enter new password' : '••••••••'}
-                        className="w-full bg-surface border border-outline-variant/40 rounded-xl px-4 py-2.5 text-sm text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all pr-10 font-mono"
+                        placeholder={showNewPass ? 'New password' : '••••••••'}
+                        className="w-full bg-surface border border-outline-variant/40 rounded-xl px-3.5 py-2.5 text-sm text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all pr-10 font-mono"
                         required
                       />
                       <button
                         type="button"
                         onClick={() => setShowNewPass(!showNewPass)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-on-surface p-1 cursor-pointer transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant/70 hover:text-on-surface p-1 cursor-pointer transition-colors"
                         title={showNewPass ? 'Hide password' : 'Show password'}
                       >
                         {showNewPass ? (
@@ -1235,12 +1123,12 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                     {newPassword && (
                       <div className="mt-2 space-y-1 animate-fade-in">
                         <div className="flex items-center justify-between text-[10px] font-mono">
-                          <span className="text-on-surface-variant">STRENGTH:</span>
+                          <span className="text-on-surface-variant/70">STRENGTH:</span>
                           <span className={`font-bold ${passwordStrength.textClass}`}>
                             {passwordStrength.label}
                           </span>
                         </div>
-                        <div className="grid grid-cols-4 gap-1 h-1.5 w-full">
+                        <div className="grid grid-cols-4 gap-1 h-1 w-full">
                           <div className={`rounded-full transition-colors ${passwordStrength.score >= 1 ? passwordStrength.color : 'bg-outline-variant/30'}`} />
                           <div className={`rounded-full transition-colors ${passwordStrength.score >= 2 ? passwordStrength.color : 'bg-outline-variant/30'}`} />
                           <div className={`rounded-full transition-colors ${passwordStrength.score >= 3 ? passwordStrength.color : 'bg-outline-variant/30'}`} />
@@ -1252,18 +1140,9 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
 
                   {/* Confirm New Password Field */}
                   <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <label className="block text-[11px] font-mono uppercase tracking-wider text-secondary">
-                        CONFIRM NEW PASSWORD
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => setShowConfirmPass(!showConfirmPass)}
-                        className="font-mono text-[10px] text-on-surface-variant hover:text-on-surface cursor-pointer select-none transition-colors"
-                      >
-                        {showConfirmPass ? 'HIDE' : 'SHOW'}
-                      </button>
-                    </div>
+                    <label className="block text-xs font-medium text-on-surface mb-1.5">
+                      Confirm New Password
+                    </label>
                     <div className="relative">
                       <input
                         type={showConfirmPass ? 'text' : 'password'}
@@ -1272,8 +1151,8 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                           setConfirmPassword(e.target.value);
                           if (securityFeedback) setSecurityFeedback(null);
                         }}
-                        placeholder={showConfirmPass ? 'Confirm new password' : '••••••••'}
-                        className={`w-full bg-surface border rounded-xl px-4 py-2.5 text-sm text-on-surface focus:outline-none transition-all pr-10 font-mono ${
+                        placeholder={showConfirmPass ? 'Confirm password' : '••••••••'}
+                        className={`w-full bg-surface border rounded-xl px-3.5 py-2.5 text-sm text-on-surface focus:outline-none transition-all pr-10 font-mono ${
                           confirmPassword && confirmPassword !== newPassword
                             ? 'border-amber-500/80 focus:border-amber-500 focus:ring-1 focus:ring-amber-500'
                             : confirmPassword && confirmPassword === newPassword
@@ -1285,7 +1164,7 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                       <button
                         type="button"
                         onClick={() => setShowConfirmPass(!showConfirmPass)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-on-surface p-1 cursor-pointer transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant/70 hover:text-on-surface p-1 cursor-pointer transition-colors"
                         title={showConfirmPass ? 'Hide password' : 'Show password'}
                       >
                         {showConfirmPass ? (
@@ -1303,14 +1182,14 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
 
                     {/* Live Match Status */}
                     {confirmPassword && (
-                      <div className="mt-2 text-[10px] font-mono animate-fade-in">
+                      <div className="mt-1.5 text-[10px] font-mono animate-fade-in">
                         {confirmPassword === newPassword ? (
-                          <span className="text-emerald-500 font-semibold flex items-center gap-1">
+                          <span className="text-emerald-500 font-medium flex items-center gap-1">
                             <span>✓</span> Passwords match
                           </span>
                         ) : (
-                          <span className="text-amber-500 font-semibold flex items-center gap-1">
-                            <span>✕</span> Passwords do not match yet
+                          <span className="text-amber-500 font-medium flex items-center gap-1">
+                            <span>✕</span> Passwords do not match
                           </span>
                         )}
                       </div>
@@ -1318,33 +1197,33 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-2">
+                <div className="pt-1">
                   <label
                     htmlFor="toggle-show-all-passwords"
-                    className="flex items-center gap-2.5 text-xs font-mono text-on-surface-variant cursor-pointer select-none"
+                    className="flex items-center gap-2 text-xs font-mono text-on-surface-variant/80 cursor-pointer select-none"
                   >
                     <input
                       id="toggle-show-all-passwords"
                       type="checkbox"
                       checked={allPasswordsShown}
                       onChange={toggleAllPasswords}
-                      className="w-4 h-4 accent-primary-container rounded cursor-pointer"
+                      className="w-3.5 h-3.5 accent-primary-container rounded cursor-pointer"
                     />
-                    <span>Show password characters across all fields</span>
+                    <span>Show password characters</span>
                   </label>
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-4">
+              <div className="flex items-center justify-end">
                 <button
                   type="submit"
                   disabled={updatingPassword}
-                  className="btn-primary !h-11 !px-8 cursor-pointer shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="btn-primary !h-10 !px-6 cursor-pointer shadow-sm text-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   {updatingPassword ? (
                     <>
                       <span className="w-3.5 h-3.5 border-2 border-on-primary border-t-transparent rounded-full animate-spin inline-block" />
-                      <span>VERIFYING & UPDATING...</span>
+                      <span>UPDATING...</span>
                     </>
                   ) : (
                     'UPDATE PASSWORD'
@@ -1354,26 +1233,18 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
             </form>
 
             {/* Session Security Overview */}
-            <div className="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-6 sm:p-8 space-y-4">
-              <h3 className="font-mono text-xs uppercase tracking-wider font-bold text-on-surface">
-                SESSION SECURITY TELEMETRY
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-mono">
-                <div className="p-4 bg-surface rounded-xl border border-outline-variant/20 space-y-1">
-                  <span className="text-secondary text-[10px] block">AUTHENTICATION</span>
-                  <p className="font-semibold text-on-surface">JWT Session Bearer</p>
-                  <p className="text-[10px] text-on-surface-variant">Active & Verified</p>
-                </div>
-                <div className="p-4 bg-surface rounded-xl border border-outline-variant/20 space-y-1">
-                  <span className="text-secondary text-[10px] block">PASSWORD HASHER</span>
-                  <p className="font-semibold text-on-surface">bcrypt (10 rounds)</p>
-                  <p className="text-[10px] text-on-surface-variant">Cryptographic Salt</p>
-                </div>
-                <div className="p-4 bg-surface rounded-xl border border-outline-variant/20 space-y-1">
-                  <span className="text-secondary text-[10px] block">ISOLATION</span>
-                  <p className="font-semibold text-on-surface">Air-Gapped Node</p>
-                  <p className="text-[10px] text-on-surface-variant">Zero Cloud Telemetry</p>
-                </div>
+            <div className="flex flex-wrap items-center justify-between gap-3 p-4 bg-surface-container-low border border-outline-variant/30 rounded-xl text-xs font-mono text-on-surface-variant/80">
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span>Session: JWT Bearer Token</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-outline-variant/60 hidden sm:inline">·</span>
+                <span>Hashing: bcrypt (10 rounds)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-outline-variant/60 hidden sm:inline">·</span>
+                <span>Cluster: Air-Gapped Zero-Telemetry</span>
               </div>
             </div>
           </div>
@@ -1381,31 +1252,31 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
 
         {/* ======================= TAB 4: DATA & ARCHIVE ======================= */}
         {activeTab === 'DATA' && (
-          <div className="space-y-8">
+          <div className="space-y-6">
             {/* Archive Export Card */}
-            <div className="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-6 sm:p-8 space-y-5">
+            <div className="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-5 sm:p-7 space-y-5">
               <div>
-                <h2 className="font-display text-xl text-on-surface font-semibold">
-                  RESEARCH ARCHIVE EXPORT
+                <h2 className="font-display text-lg sm:text-xl text-on-surface font-semibold">
+                  Data & Workspace Storage
                 </h2>
-                <p className="text-xs text-on-surface-variant mt-1">
-                  Download your complete research memory as a structured, machine-readable JSON backup.
+                <p className="text-xs text-on-surface-variant/80 mt-0.5">
+                  Export your scientific memory or manage local client storage.
                 </p>
               </div>
 
               <div className="p-4 bg-surface rounded-xl border border-outline-variant/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="space-y-1">
-                  <span className="font-mono text-xs font-bold text-on-surface block">
-                    Full Scientific Corpus Snapshot
+                <div className="space-y-0.5">
+                  <span className="font-medium text-sm text-on-surface block">
+                    Corpus Archive Snapshot
                   </span>
-                  <p className="text-xs text-on-surface-variant">
-                    Includes manuscript metadata, problem statements, key takeaways, and system preferences.
+                  <p className="text-xs text-on-surface-variant/70">
+                    Download indexed papers, metadata, briefs, and notes as JSON.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={handleExportData}
-                  className="btn-secondary !h-10 !px-5 !text-xs shrink-0 cursor-pointer"
+                  className="btn-secondary !h-9 !px-4 !text-xs shrink-0 cursor-pointer"
                 >
                   DOWNLOAD JSON ARCHIVE ↗
                 </button>
@@ -1413,18 +1284,18 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
 
               {/* Cache Management */}
               <div className="p-4 bg-surface rounded-xl border border-outline-variant/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="space-y-1">
-                  <span className="font-mono text-xs font-bold text-on-surface block">
-                    Local Query & Document Cache
+                <div className="space-y-0.5">
+                  <span className="font-medium text-sm text-on-surface block">
+                    Client Storage Cache
                   </span>
-                  <p className="text-xs text-on-surface-variant">
-                    Clear local browser cache if experiencing stale search indexes or UI latency.
+                  <p className="text-xs text-on-surface-variant/70">
+                    Clear local browser cache if experiencing stale search results.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={handleClearCache}
-                  className="font-mono text-xs px-4 py-2 border border-outline-variant/40 rounded-full hover:bg-surface-container cursor-pointer transition-colors shrink-0"
+                  className="font-mono text-xs px-3.5 py-1.5 border border-outline-variant/40 rounded-full hover:bg-surface-container cursor-pointer transition-colors shrink-0 text-on-surface"
                 >
                   CLEAR CACHE
                 </button>
@@ -1432,21 +1303,21 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
             </div>
 
             {/* Danger Zone */}
-            <div className="border border-error/30 bg-error/[0.02] rounded-2xl p-6 sm:p-8 space-y-4">
+            <div className="border border-error/30 bg-error/[0.02] rounded-2xl p-5 sm:p-7 space-y-3">
               <div className="flex items-center gap-2 text-error">
                 <span className="w-2 h-2 rounded-full bg-error" />
                 <h3 className="font-mono text-xs uppercase tracking-wider font-bold">
                   DANGER ZONE // PERMANENT DELETION
                 </h3>
               </div>
-              <p className="text-xs text-on-surface-variant leading-relaxed max-w-2xl">
-                Erasing your account permanently removes your vector embeddings, scientific summaries, research notes, and conversation sessions from the Zurich cluster. This action cannot be reversed.
+              <p className="text-xs text-on-surface-variant/80 leading-relaxed max-w-xl">
+                Erasing your account permanently deletes all indexed manuscripts, vector embeddings, and notes. This action cannot be undone.
               </p>
-              <div className="pt-2">
+              <div className="pt-1">
                 <button
                   type="button"
                   onClick={handleDeleteAccount}
-                  className="inline-flex items-center justify-center h-10 px-6 border border-error text-error rounded-full font-mono text-xs hover:bg-error hover:text-white transition-all cursor-pointer font-bold tracking-wider"
+                  className="inline-flex items-center justify-center h-9 px-5 border border-error text-error rounded-full font-mono text-xs hover:bg-error hover:text-white transition-all cursor-pointer font-bold tracking-wider"
                 >
                   DELETE RESEARCHER ACCOUNT
                 </button>
