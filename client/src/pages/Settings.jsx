@@ -187,10 +187,8 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
       errors.name = 'Name can only contain letters, spaces, hyphens, and periods.';
     }
 
-    // 2. Strict Age validation: integers between 18 and 120
-    if (!age || !age.trim()) {
-      errors.age = 'Age is required (whole numbers only).';
-    } else {
+    // 2. Strict Age validation: integers between 18 and 120 (optional field)
+    if (age && age.trim()) {
       const numAge = parseInt(age, 10);
       if (isNaN(numAge) || !Number.isInteger(numAge) || numAge < 18 || numAge > 120) {
         errors.age = 'Age must be a valid whole number between 18 and 120.';
@@ -231,14 +229,14 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
     const errors = validateProfileFields();
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
-      notify('error', 'Please resolve the strict validation errors in the highlighted fields.');
+      notify('error', 'Please resolve the highlighted validation errors.');
       return;
     }
 
     setFieldErrors({});
     setSavingProfile(true);
 
-    const parsedAge = age ? parseInt(age, 10) : null;
+    const parsedAge = age && age.trim() ? parseInt(age, 10) : null;
     const updatedUser = {
       ...currentUser,
       name: name.trim(),
@@ -481,23 +479,23 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
       </div>
 
       {/* 2. Top Header with User Identity Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 sm:gap-6 pb-6 border-b border-outline-variant/30">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 sm:gap-6 pb-6 border-b border-outline-variant/20">
         <div>
-          <h1 className="font-display text-3xl sm:text-5xl text-on-surface font-medium tracking-tight">
-            SETTINGS
+          <h1 className="font-display text-2xl sm:text-4xl text-on-surface font-semibold tracking-tight">
+            Settings & Workspace
           </h1>
-          <p className="text-xs sm:text-sm text-on-surface-variant mt-2 max-w-xl">
-            Configure your researcher identity, synthesis preferences, and secure data storage.
+          <p className="text-xs sm:text-sm text-on-surface-variant/80 mt-1 max-w-xl">
+            Configure your researcher identity, academic preferences, and workspace credentials.
           </p>
         </div>
 
         {/* User Identity Chip & Logout */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-          <div className="flex items-center gap-2 sm:gap-2.5 bg-surface-container-low border border-outline-variant/30 px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-mono">
-            <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-inverse-surface text-surface flex items-center justify-center font-bold text-[9px] sm:text-[10px]">
+          <div className="flex items-center gap-2 bg-surface-container-lowest border border-outline-variant/30 px-3 py-1.5 rounded-full text-xs font-mono shadow-2xs">
+            <span className="w-5 h-5 rounded-full bg-inverse-surface text-surface flex items-center justify-center font-bold text-[9px]">
               {initials}
             </span>
-            <span className="text-on-surface font-medium truncate max-w-[130px] sm:max-w-[180px]">
+            <span className="text-on-surface font-medium truncate max-w-[140px] sm:max-w-[180px]">
               {email}
             </span>
           </div>
@@ -541,20 +539,20 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
       <SettingsGearMechanism />
 
       {/* 3. Horizontal Minimalist Tab Bar */}
-      <div className="flex border-b border-outline-variant/30 space-x-2 sm:space-x-4 overflow-x-auto pb-px">
+      <div className="flex border-b border-outline-variant/20 space-x-1 sm:space-x-3 overflow-x-auto pb-px no-scrollbar">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`pb-3 px-3 sm:px-4 font-mono text-xs tracking-wider uppercase transition-all cursor-pointer whitespace-nowrap relative flex items-center gap-2 ${
+              className={`pb-3 px-3.5 sm:px-4 font-mono text-xs tracking-wider uppercase transition-all cursor-pointer whitespace-nowrap relative flex items-center gap-2 ${
                 isActive
                   ? 'text-on-surface font-bold border-b-2 border-primary-container'
-                  : 'text-secondary hover:text-on-surface hover:border-b-2 hover:border-outline-variant/50'
+                  : 'text-on-surface-variant/70 hover:text-on-surface hover:border-b-2 hover:border-outline-variant/40'
               }`}
             >
-              <span className={`text-[10px] ${isActive ? 'text-primary-container font-semibold' : 'text-on-surface-variant/60'}`}>
+              <span className={`text-[10px] ${isActive ? 'text-primary-container font-semibold' : 'text-on-surface-variant/50'}`}>
                 [{tab.num}]
               </span>
               <span>{tab.label}</span>
@@ -567,37 +565,63 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
       <div className="pt-2">
         {/* ======================= TAB 1: PROFILE ======================= */}
         {activeTab === 'PROFILE' && (
-          <form onSubmit={handleSaveProfile} className="space-y-8">
-            {/* Identity Summary Card */}
-            <div className="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-5 sm:p-7 space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-outline-variant/20">
-                <div className="flex items-center gap-3.5">
-                  <div className="w-12 h-12 rounded-xl bg-inverse-surface text-surface flex items-center justify-center font-display text-lg font-bold tracking-tight shadow-xs shrink-0">
-                    {initials}
-                  </div>
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h2 className="font-display text-lg sm:text-xl text-on-surface font-semibold">
-                        {name || 'Researcher'}
-                      </h2>
-                      <span className="font-mono text-[10px] bg-primary-container/15 text-primary-container border border-primary-container/30 px-2 py-0.5 rounded font-medium">
-                        {academicRole}
-                      </span>
-                    </div>
-                    <p className="text-xs font-mono text-on-surface-variant/80">
-                      {email} · <span className="text-emerald-500 font-medium">Verified Researcher</span>
-                    </p>
-                  </div>
+          <form onSubmit={handleSaveProfile} className="space-y-6">
+            {/* Identity Banner */}
+            <div className="bg-surface-container-lowest border border-outline-variant/25 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+              <div className="flex items-center gap-4">
+                <div className="w-13 h-13 rounded-2xl bg-inverse-surface text-surface flex items-center justify-center font-display text-xl font-bold tracking-tight shadow-sm shrink-0 border border-outline-variant/20">
+                  {initials}
                 </div>
-
-                <div className="font-mono text-xs text-on-surface-variant/80">
-                  <span>{affiliation || 'Independent Scholar'}</span>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2.5 flex-wrap">
+                    <h2 className="font-display text-xl sm:text-2xl text-on-surface font-semibold tracking-tight">
+                      {name || 'Researcher'}
+                    </h2>
+                    <span className="font-mono text-[11px] bg-primary-container/15 text-primary-container border border-primary-container/30 px-2.5 py-0.5 rounded-full font-medium">
+                      {academicRole}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs font-mono text-on-surface-variant/80 flex-wrap">
+                    <span className="truncate max-w-[200px] sm:max-w-none">{email}</span>
+                    <span className="text-outline-variant/60">·</span>
+                    <span className="text-emerald-500 font-medium flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Verified Researcher
+                    </span>
+                    {affiliation && (
+                      <>
+                        <span className="text-outline-variant/60">·</span>
+                        <span className="truncate max-w-[220px]">{affiliation}</span>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              {/* Form Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-                {/* 1. Full Name */}
+              {/* Research Field Chip */}
+              <div className="sm:text-right shrink-0">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-on-surface-variant/60 block mb-1">
+                  Primary Domain
+                </span>
+                <span className="inline-block text-xs font-medium text-on-surface bg-surface-container-low border border-outline-variant/30 px-3 py-1.5 rounded-xl">
+                  {researchField}
+                </span>
+              </div>
+            </div>
+
+            {/* Section 1: Academic & Professional Credentials */}
+            <div className="bg-surface-container-lowest border border-outline-variant/25 rounded-2xl p-5 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h3 className="font-display text-base font-semibold text-on-surface">
+                  Academic & Professional Credentials
+                </h3>
+                <p className="text-xs text-on-surface-variant/70 mt-0.5">
+                  Your institutional standing, publication attribution name, and academic discipline.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 pt-1">
+                {/* Full Name */}
                 <div>
                   <label className="block text-xs font-medium text-on-surface mb-1.5">
                     Full Name <span className="text-primary-container">*</span>
@@ -607,83 +631,29 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                     value={name}
                     onChange={handleNameChange}
                     placeholder="e.g. Dr. Eleanor Vance"
-                    className={`w-full bg-surface border rounded-xl px-3.5 py-2.5 text-sm text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
+                    className={`w-full h-11 bg-surface border rounded-xl px-3.5 text-sm text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
                       fieldErrors.name
                         ? 'border-error ring-1 ring-error text-error'
-                        : 'border-outline-variant/40 focus:border-primary-container focus:ring-1 focus:ring-primary-container'
+                        : 'border-outline-variant/30 hover:border-outline-variant/60 focus:border-primary-container focus:ring-1 focus:ring-primary-container/40'
                     }`}
                     required
                   />
                   {fieldErrors.name && (
-                    <p className="text-[11px] text-error font-mono mt-1 flex items-center gap-1">
+                    <p className="text-[11px] text-error font-mono mt-1.5 flex items-center gap-1">
                       <span>✕</span> {fieldErrors.name}
                     </p>
                   )}
                 </div>
 
-                {/* 2. Age (Strict numeric input) */}
+                {/* Academic Role */}
                 <div>
                   <label className="block text-xs font-medium text-on-surface mb-1.5">
-                    Age <span className="text-primary-container">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      pattern="[0-9]*"
-                      maxLength={3}
-                      value={age}
-                      onChange={handleAgeChange}
-                      placeholder="e.g. 34"
-                      className={`w-full bg-surface border rounded-xl px-3.5 py-2.5 text-sm font-mono text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
-                        fieldErrors.age
-                          ? 'border-error ring-1 ring-error text-error'
-                          : 'border-outline-variant/40 focus:border-primary-container focus:ring-1 focus:ring-primary-container'
-                      }`}
-                      required
-                    />
-                    <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-xs font-mono text-on-surface-variant/50">
-                      yrs
-                    </div>
-                  </div>
-                  {fieldErrors.age && (
-                    <p className="text-[11px] text-error font-mono mt-1 flex items-center gap-1">
-                      <span>✕</span> {fieldErrors.age}
-                    </p>
-                  )}
-                </div>
-
-                {/* 3. Institutional Affiliation */}
-                <div>
-                  <label className="block text-xs font-medium text-on-surface mb-1.5">
-                    Institutional Affiliation
-                  </label>
-                  <input
-                    type="text"
-                    value={affiliation}
-                    onChange={(e) => {
-                      setAffiliation(e.target.value);
-                      if (fieldErrors.affiliation) setFieldErrors((prev) => ({ ...prev, affiliation: undefined }));
-                    }}
-                    placeholder="e.g. Oxford Institute or Independent Lab"
-                    className="w-full bg-surface border border-outline-variant/40 rounded-xl px-3.5 py-2.5 text-sm text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all"
-                  />
-                  {fieldErrors.affiliation && (
-                    <p className="text-[11px] text-error font-mono mt-1 flex items-center gap-1">
-                      <span>✕</span> {fieldErrors.affiliation}
-                    </p>
-                  )}
-                </div>
-
-                {/* 4. Academic Role / Position */}
-                <div>
-                  <label className="block text-xs font-medium text-on-surface mb-1.5">
-                    Academic Role
+                    Academic Role / Title
                   </label>
                   <select
                     value={academicRole}
                     onChange={(e) => setAcademicRole(e.target.value)}
-                    className="w-full bg-surface border border-outline-variant/40 rounded-xl px-3.5 py-2.5 text-sm font-sans text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all cursor-pointer"
+                    className="w-full h-11 bg-surface border border-outline-variant/30 hover:border-outline-variant/60 rounded-xl px-3.5 text-sm font-sans text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all cursor-pointer"
                   >
                     <option value="Principal Investigator (PI)">Principal Investigator (PI)</option>
                     <option value="Senior Researcher / Scientist">Senior Researcher / Scientist</option>
@@ -695,7 +665,29 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                   </select>
                 </div>
 
-                {/* 5. Primary Research Field */}
+                {/* Institutional Affiliation */}
+                <div>
+                  <label className="block text-xs font-medium text-on-surface mb-1.5">
+                    Institutional Affiliation
+                  </label>
+                  <input
+                    type="text"
+                    value={affiliation}
+                    onChange={(e) => {
+                      setAffiliation(e.target.value);
+                      if (fieldErrors.affiliation) setFieldErrors((prev) => ({ ...prev, affiliation: undefined }));
+                    }}
+                    placeholder="e.g. Stanford University or Independent AI Lab"
+                    className="w-full h-11 bg-surface border border-outline-variant/30 hover:border-outline-variant/60 rounded-xl px-3.5 text-sm text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all"
+                  />
+                  {fieldErrors.affiliation && (
+                    <p className="text-[11px] text-error font-mono mt-1.5 flex items-center gap-1">
+                      <span>✕</span> {fieldErrors.affiliation}
+                    </p>
+                  )}
+                </div>
+
+                {/* Primary Research Field */}
                 <div>
                   <label className="block text-xs font-medium text-on-surface mb-1.5">
                     Primary Research Field
@@ -703,7 +695,7 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                   <select
                     value={researchField}
                     onChange={(e) => setResearchField(e.target.value)}
-                    className="w-full bg-surface border border-outline-variant/40 rounded-xl px-3.5 py-2.5 text-sm font-sans text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all cursor-pointer"
+                    className="w-full h-11 bg-surface border border-outline-variant/30 hover:border-outline-variant/60 rounded-xl px-3.5 text-sm font-sans text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all cursor-pointer"
                   >
                     <option value="Artificial Intelligence & Machine Learning">Artificial Intelligence & Machine Learning</option>
                     <option value="Natural Language Processing (NLP)">Natural Language Processing (NLP)</option>
@@ -715,8 +707,82 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                     <option value="Other / Interdisciplinary AI">Other / Interdisciplinary AI</option>
                   </select>
                 </div>
+              </div>
+            </div>
 
-                {/* 6. ORCID iD */}
+            {/* Section 2: Research Statement & Focus */}
+            <div className="bg-surface-container-lowest border border-outline-variant/25 rounded-2xl p-5 sm:p-7 space-y-4 shadow-xs">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-display text-base font-semibold text-on-surface">
+                    Research Statement
+                  </h3>
+                  <p className="text-xs text-on-surface-variant/70 mt-0.5">
+                    A concise summary of your scientific hypothesis and current investigative focus.
+                  </p>
+                </div>
+                <span className={`font-mono text-[11px] px-2.5 py-0.5 rounded-full border ${
+                  bio.length >= 280
+                    ? 'text-amber-500 border-amber-500/30 bg-amber-500/10 font-bold'
+                    : 'text-on-surface-variant/60 border-outline-variant/20 bg-surface-container-low'
+                }`}>
+                  {bio.length} / 300
+                </span>
+              </div>
+
+              <div>
+                <textarea
+                  rows={3}
+                  maxLength={300}
+                  value={bio}
+                  onChange={handleBioChange}
+                  placeholder="Summarize your primary scientific focus, hypotheses, and methodologies..."
+                  className={`w-full bg-surface border rounded-xl p-3.5 text-sm text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all resize-none leading-relaxed ${
+                    fieldErrors.bio
+                      ? 'border-error ring-1 ring-error text-error'
+                      : 'border-outline-variant/30 hover:border-outline-variant/60 focus:border-primary-container focus:ring-1 focus:ring-primary-container/40'
+                  }`}
+                />
+                {fieldErrors.bio && (
+                  <p className="text-[11px] text-error font-mono mt-1.5 flex items-center gap-1">
+                    <span>✕</span> {fieldErrors.bio}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Section 3: Identifiers & Contact Details */}
+            <div className="bg-surface-container-lowest border border-outline-variant/25 rounded-2xl p-5 sm:p-7 space-y-5 shadow-xs">
+              <div>
+                <h3 className="font-display text-base font-semibold text-on-surface">
+                  Identifiers & Contact Details
+                </h3>
+                <p className="text-xs text-on-surface-variant/70 mt-0.5">
+                  Public registry identifiers and authenticated communication channels.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 pt-1">
+                {/* Account Email (Verified Display) */}
+                <div>
+                  <label className="block text-xs font-medium text-on-surface mb-1.5">
+                    Account Email
+                  </label>
+                  <div className="flex items-center justify-between h-11 px-3.5 bg-surface-container-low border border-outline-variant/25 rounded-xl text-sm font-mono text-on-surface">
+                    <div className="flex items-center gap-2 truncate">
+                      <svg className="w-4 h-4 text-on-surface-variant/60 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                      </svg>
+                      <span className="truncate">{email}</span>
+                    </div>
+                    <span className="shrink-0 text-[10px] font-sans font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded-full flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      Verified
+                    </span>
+                  </div>
+                </div>
+
+                {/* ORCID iD */}
                 <div>
                   <label className="block text-xs font-medium text-on-surface mb-1.5">
                     ORCID iD
@@ -727,127 +793,114 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                     value={orcid}
                     onChange={handleOrcidChange}
                     placeholder="0000-0002-1825-0097"
-                    className={`w-full bg-surface border rounded-xl px-3.5 py-2.5 text-sm font-mono text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
+                    className={`w-full h-11 bg-surface border rounded-xl px-3.5 text-sm font-mono text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
                       fieldErrors.orcid
                         ? 'border-error ring-1 ring-error text-error'
-                        : 'border-outline-variant/40 focus:border-primary-container focus:ring-1 focus:ring-primary-container'
+                        : 'border-outline-variant/30 hover:border-outline-variant/60 focus:border-primary-container focus:ring-1 focus:ring-primary-container/40'
                     }`}
                   />
                   {fieldErrors.orcid && (
-                    <p className="text-[11px] text-error font-mono mt-1 flex items-center gap-1">
+                    <p className="text-[11px] text-error font-mono mt-1.5 flex items-center gap-1">
                       <span>✕</span> {fieldErrors.orcid}
                     </p>
                   )}
                 </div>
 
-                {/* 7. Contact Phone */}
+                {/* Contact Phone */}
                 <div>
                   <label className="block text-xs font-medium text-on-surface mb-1.5">
-                    Phone / Extension
+                    Contact Phone / Extension <span className="text-on-surface-variant/50 font-normal">(Optional)</span>
                   </label>
                   <input
                     type="tel"
                     value={phone}
                     onChange={handlePhoneChange}
                     placeholder="+1 (555) 234-5678"
-                    className={`w-full bg-surface border rounded-xl px-3.5 py-2.5 text-sm font-mono text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
+                    className={`w-full h-11 bg-surface border rounded-xl px-3.5 text-sm font-mono text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
                       fieldErrors.phone
                         ? 'border-error ring-1 ring-error text-error'
-                        : 'border-outline-variant/40 focus:border-primary-container focus:ring-1 focus:ring-primary-container'
+                        : 'border-outline-variant/30 hover:border-outline-variant/60 focus:border-primary-container focus:ring-1 focus:ring-primary-container/40'
                     }`}
                   />
                   {fieldErrors.phone && (
-                    <p className="text-[11px] text-error font-mono mt-1 flex items-center gap-1">
+                    <p className="text-[11px] text-error font-mono mt-1.5 flex items-center gap-1">
                       <span>✕</span> {fieldErrors.phone}
                     </p>
                   )}
                 </div>
 
-                {/* 8. Authenticated Email Address (Read-Only) */}
+                {/* Age (Optional) */}
                 <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-xs font-medium text-on-surface">
-                      Email Address
-                    </label>
-                    <span className="text-[10px] font-mono text-on-surface-variant/60">
-                      Read-only
-                    </span>
-                  </div>
-                  <input
-                    type="email"
-                    value={email}
-                    disabled
-                    className="w-full bg-surface-container border border-outline-variant/30 rounded-xl px-3.5 py-2.5 text-sm font-mono text-on-surface-variant opacity-80 cursor-not-allowed"
-                  />
-                </div>
-              </div>
-
-              {/* 9. Bio / Statement (with character counter) */}
-              <div className="pt-1">
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-xs font-medium text-on-surface">
-                    Research Statement / Bio
+                  <label className="block text-xs font-medium text-on-surface mb-1.5">
+                    Age <span className="text-on-surface-variant/50 font-normal">(Optional)</span>
                   </label>
-                  <span className={`font-mono text-[10px] ${
-                    bio.length >= 280 ? 'text-amber-500 font-bold' : 'text-on-surface-variant/60'
-                  }`}>
-                    {bio.length} / 300
-                  </span>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxLength={3}
+                      value={age}
+                      onChange={handleAgeChange}
+                      placeholder="e.g. 34"
+                      className={`w-full h-11 bg-surface border rounded-xl px-3.5 text-sm font-mono text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all ${
+                        fieldErrors.age
+                          ? 'border-error ring-1 ring-error text-error'
+                          : 'border-outline-variant/30 hover:border-outline-variant/60 focus:border-primary-container focus:ring-1 focus:ring-primary-container/40'
+                      }`}
+                    />
+                    <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-xs font-mono text-on-surface-variant/50">
+                      yrs
+                    </div>
+                  </div>
+                  {fieldErrors.age && (
+                    <p className="text-[11px] text-error font-mono mt-1.5 flex items-center gap-1">
+                      <span>✕</span> {fieldErrors.age}
+                    </p>
+                  )}
                 </div>
-                <textarea
-                  rows={3}
-                  maxLength={300}
-                  value={bio}
-                  onChange={handleBioChange}
-                  placeholder="Summarize your primary scientific focus, hypotheses, and methodologies..."
-                  className={`w-full bg-surface border rounded-xl p-3 text-sm text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-all resize-none ${
-                    fieldErrors.bio
-                      ? 'border-error ring-1 ring-error text-error'
-                      : 'border-outline-variant/40 focus:border-primary-container focus:ring-1 focus:ring-primary-container'
-                  }`}
-                />
-                {fieldErrors.bio && (
-                  <p className="text-[11px] text-error font-mono mt-1 flex items-center gap-1">
-                    <span>✕</span> {fieldErrors.bio}
-                  </p>
-                )}
               </div>
             </div>
 
-            {/* Actions */}
-            <div className="flex items-center justify-end gap-4 pt-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setName(currentUser?.name || '');
-                  setAge(currentUser?.age !== undefined && currentUser?.age !== null ? String(currentUser.age) : '');
-                  setAffiliation(currentUser?.affiliation || '');
-                  setAcademicRole(currentUser?.academicRole || 'Senior Researcher / Scientist');
-                  setResearchField(currentUser?.researchField || 'Artificial Intelligence & Machine Learning');
-                  setOrcid(currentUser?.orcid || '');
-                  setPhone(currentUser?.phone || '');
-                  setBio(currentUser?.bio || '');
-                  setFieldErrors({});
-                  notify('info', 'Form reverted to currently saved credentials.');
-                }}
-                className="btn-ghost !h-11 !px-5 !text-xs cursor-pointer border border-outline-variant/40"
-              >
-                RESET VALUES
-              </button>
-              <button
-                type="submit"
-                disabled={savingProfile}
-                className="btn-primary !h-11 !px-8 cursor-pointer shadow-sm disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
-              >
-                {savingProfile ? (
-                  <>
-                    <span className="w-3.5 h-3.5 border-2 border-surface border-t-transparent rounded-full animate-spin" />
-                    <span>SAVING CREDENTIALS...</span>
-                  </>
-                ) : (
-                  <span>SAVE PROFILE CHANGES</span>
-                )}
-              </button>
+            {/* Actions Bar */}
+            <div className="flex items-center justify-between pt-2">
+              <span className="text-xs font-mono text-on-surface-variant/60 hidden sm:inline">
+                All updates synchronize with active sessions
+              </span>
+              <div className="flex items-center gap-3 ml-auto">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setName(currentUser?.name || '');
+                    setAge(currentUser?.age !== undefined && currentUser?.age !== null ? String(currentUser.age) : '');
+                    setAffiliation(currentUser?.affiliation || '');
+                    setAcademicRole(currentUser?.academicRole || 'Senior Researcher / Scientist');
+                    setResearchField(currentUser?.researchField || 'Artificial Intelligence & Machine Learning');
+                    setOrcid(currentUser?.orcid || '');
+                    setPhone(currentUser?.phone || '');
+                    setBio(currentUser?.bio || '');
+                    setFieldErrors({});
+                    notify('info', 'Form reverted to currently saved credentials.');
+                  }}
+                  className="btn-ghost !h-11 !px-5 !text-xs cursor-pointer border border-outline-variant/30 hover:border-outline-variant/60"
+                >
+                  RESET VALUES
+                </button>
+                <button
+                  type="submit"
+                  disabled={savingProfile}
+                  className="btn-primary !h-11 !px-8 cursor-pointer shadow-sm disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 text-xs font-semibold"
+                >
+                  {savingProfile ? (
+                    <>
+                      <span className="w-3.5 h-3.5 border-2 border-surface border-t-transparent rounded-full animate-spin" />
+                      <span>SAVING CREDENTIALS...</span>
+                    </>
+                  ) : (
+                    <span>SAVE PROFILE CHANGES</span>
+                  )}
+                </button>
+              </div>
             </div>
           </form>
         )}
@@ -855,17 +908,17 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
         {/* ======================= TAB 2: PREFERENCES ======================= */}
         {activeTab === 'PREFERENCES' && (
           <div className="space-y-6">
-            <div className="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-5 sm:p-7 space-y-6">
+            <div className="bg-surface-container-lowest border border-outline-variant/25 rounded-2xl p-5 sm:p-7 space-y-6 shadow-xs">
               <div>
-                <h2 className="font-display text-lg sm:text-xl text-on-surface font-semibold">
+                <h2 className="font-display text-base sm:text-lg text-on-surface font-semibold">
                   Workflow Preferences
                 </h2>
-                <p className="text-xs text-on-surface-variant/80 mt-0.5">
+                <p className="text-xs text-on-surface-variant/70 mt-0.5">
                   Customize citation formats, briefing depth, and view layout.
                 </p>
               </div>
 
-              <div className="space-y-4 divide-y divide-outline-variant/20 pt-1">
+              <div className="space-y-4 divide-y divide-outline-variant/15 pt-1">
                 {/* Setting 1: Citation Standard */}
                 <div className="pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="space-y-0.5">
@@ -880,7 +933,7 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                     <select
                       value={citationStyle}
                       onChange={(e) => setCitationStyle(e.target.value)}
-                      className="w-full bg-surface border border-outline-variant/40 rounded-xl px-3.5 py-2 text-xs font-mono text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container cursor-pointer transition-all"
+                      className="w-full h-10 bg-surface border border-outline-variant/30 hover:border-outline-variant/60 rounded-xl px-3.5 text-xs font-mono text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 cursor-pointer transition-all"
                     >
                       <option value="APA">APA 7th Edition</option>
                       <option value="IEEE">IEEE Reference Style</option>
@@ -905,7 +958,7 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                     <select
                       value={synthesisDepth}
                       onChange={(e) => setSynthesisDepth(e.target.value)}
-                      className="w-full bg-surface border border-outline-variant/40 rounded-xl px-3.5 py-2 text-xs font-mono text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container cursor-pointer transition-all"
+                      className="w-full h-10 bg-surface border border-outline-variant/30 hover:border-outline-variant/60 rounded-xl px-3.5 text-xs font-mono text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 cursor-pointer transition-all"
                     >
                       <option value="THREE_PILLAR">3-Pillar (Problem, Solution, Impact)</option>
                       <option value="EXECUTIVE">Executive Abstract (High-Speed)</option>
@@ -989,14 +1042,14 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
               <button
                 type="button"
                 onClick={handleResetPreferences}
-                className="btn-ghost !h-10 !px-4 !text-xs cursor-pointer border border-outline-variant/40"
+                className="btn-ghost !h-10 !px-4 !text-xs cursor-pointer border border-outline-variant/30 hover:border-outline-variant/60"
               >
                 RESET TO DEFAULTS
               </button>
               <button
                 type="button"
                 onClick={handleSavePreferences}
-                className="btn-primary !h-10 !px-6 cursor-pointer shadow-sm text-xs"
+                className="btn-primary !h-10 !px-6 cursor-pointer shadow-sm text-xs font-semibold"
               >
                 SAVE PREFERENCES
               </button>
@@ -1006,14 +1059,14 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
 
         {/* ======================= TAB 3: SECURITY ======================= */}
         {activeTab === 'SECURITY' && (
-          <div className="space-y-8">
+          <div className="space-y-6">
             <form onSubmit={handleChangePassword} className="space-y-6">
-              <div className="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-5 sm:p-7 space-y-6">
+              <div className="bg-surface-container-lowest border border-outline-variant/25 rounded-2xl p-5 sm:p-7 space-y-6 shadow-xs">
                 <div>
-                  <h2 className="font-display text-lg sm:text-xl text-on-surface font-semibold">
+                  <h2 className="font-display text-base sm:text-lg text-on-surface font-semibold">
                     Security & Authentication
                   </h2>
-                  <p className="text-xs text-on-surface-variant/80 mt-0.5">
+                  <p className="text-xs text-on-surface-variant/70 mt-0.5">
                     Update your account password with at least 8 secure characters.
                   </p>
                 </div>
@@ -1045,7 +1098,7 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 pt-1">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 pt-1">
                   {/* Current Password Field */}
                   <div>
                     <label className="block text-xs font-medium text-on-surface mb-1.5">
@@ -1060,7 +1113,7 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                           if (securityFeedback) setSecurityFeedback(null);
                         }}
                         placeholder={showCurrentPass ? 'Current password' : '••••••••'}
-                        className="w-full bg-surface border border-outline-variant/40 rounded-xl px-3.5 py-2.5 text-sm text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all pr-10 font-mono"
+                        className="w-full h-11 bg-surface border border-outline-variant/30 hover:border-outline-variant/60 rounded-xl px-3.5 text-sm text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all pr-10 font-mono"
                         required
                       />
                       <button
@@ -1097,7 +1150,7 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                           if (securityFeedback) setSecurityFeedback(null);
                         }}
                         placeholder={showNewPass ? 'New password' : '••••••••'}
-                        className="w-full bg-surface border border-outline-variant/40 rounded-xl px-3.5 py-2.5 text-sm text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all pr-10 font-mono"
+                        className="w-full h-11 bg-surface border border-outline-variant/30 hover:border-outline-variant/60 rounded-xl px-3.5 text-sm text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all pr-10 font-mono"
                         required
                       />
                       <button
@@ -1152,12 +1205,12 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                           if (securityFeedback) setSecurityFeedback(null);
                         }}
                         placeholder={showConfirmPass ? 'Confirm password' : '••••••••'}
-                        className={`w-full bg-surface border rounded-xl px-3.5 py-2.5 text-sm text-on-surface focus:outline-none transition-all pr-10 font-mono ${
+                        className={`w-full h-11 bg-surface border rounded-xl px-3.5 text-sm text-on-surface focus:outline-none transition-all pr-10 font-mono ${
                           confirmPassword && confirmPassword !== newPassword
                             ? 'border-amber-500/80 focus:border-amber-500 focus:ring-1 focus:ring-amber-500'
                             : confirmPassword && confirmPassword === newPassword
                             ? 'border-emerald-500/80 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500'
-                            : 'border-outline-variant/40 focus:border-primary-container focus:ring-1 focus:ring-primary-container'
+                            : 'border-outline-variant/30 hover:border-outline-variant/60 focus:border-primary-container focus:ring-1 focus:ring-primary-container/40'
                         }`}
                         required
                       />
@@ -1218,7 +1271,7 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                 <button
                   type="submit"
                   disabled={updatingPassword}
-                  className="btn-primary !h-10 !px-6 cursor-pointer shadow-sm text-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="btn-primary !h-10 !px-6 cursor-pointer shadow-sm text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   {updatingPassword ? (
                     <>
@@ -1233,7 +1286,7 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
             </form>
 
             {/* Session Security Overview */}
-            <div className="flex flex-wrap items-center justify-between gap-3 p-4 bg-surface-container-low border border-outline-variant/30 rounded-xl text-xs font-mono text-on-surface-variant/80">
+            <div className="flex flex-wrap items-center justify-between gap-3 p-4 bg-surface-container-lowest border border-outline-variant/25 rounded-xl text-xs font-mono text-on-surface-variant/80 shadow-xs">
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 <span>Session: JWT Bearer Token</span>
@@ -1254,17 +1307,17 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
         {activeTab === 'DATA' && (
           <div className="space-y-6">
             {/* Archive Export Card */}
-            <div className="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-5 sm:p-7 space-y-5">
+            <div className="bg-surface-container-lowest border border-outline-variant/25 rounded-2xl p-5 sm:p-7 space-y-5 shadow-xs">
               <div>
-                <h2 className="font-display text-lg sm:text-xl text-on-surface font-semibold">
+                <h2 className="font-display text-base sm:text-lg text-on-surface font-semibold">
                   Data & Workspace Storage
                 </h2>
-                <p className="text-xs text-on-surface-variant/80 mt-0.5">
+                <p className="text-xs text-on-surface-variant/70 mt-0.5">
                   Export your scientific memory or manage local client storage.
                 </p>
               </div>
 
-              <div className="p-4 bg-surface rounded-xl border border-outline-variant/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="p-4 bg-surface rounded-xl border border-outline-variant/25 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="space-y-0.5">
                   <span className="font-medium text-sm text-on-surface block">
                     Corpus Archive Snapshot
@@ -1276,14 +1329,14 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                 <button
                   type="button"
                   onClick={handleExportData}
-                  className="btn-secondary !h-9 !px-4 !text-xs shrink-0 cursor-pointer"
+                  className="btn-secondary !h-9 !px-4 !text-xs shrink-0 cursor-pointer font-medium"
                 >
                   DOWNLOAD JSON ARCHIVE ↗
                 </button>
               </div>
 
               {/* Cache Management */}
-              <div className="p-4 bg-surface rounded-xl border border-outline-variant/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="p-4 bg-surface rounded-xl border border-outline-variant/25 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="space-y-0.5">
                   <span className="font-medium text-sm text-on-surface block">
                     Client Storage Cache
@@ -1295,7 +1348,7 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
                 <button
                   type="button"
                   onClick={handleClearCache}
-                  className="font-mono text-xs px-3.5 py-1.5 border border-outline-variant/40 rounded-full hover:bg-surface-container cursor-pointer transition-colors shrink-0 text-on-surface"
+                  className="font-mono text-xs px-3.5 py-1.5 border border-outline-variant/30 hover:border-outline-variant/60 rounded-full hover:bg-surface-container cursor-pointer transition-colors shrink-0 text-on-surface"
                 >
                   CLEAR CACHE
                 </button>

@@ -425,19 +425,20 @@ const SettingsGearMechanism = () => {
   }, []);
 
   return (
-    <div className="bg-surface-container-low border border-outline-variant/60 rounded-2xl overflow-hidden shadow-xs transition-all duration-300 relative">
+    <div className="bg-surface-container-lowest border border-outline-variant/25 rounded-2xl overflow-hidden shadow-xs transition-all duration-300 relative">
       {/* 1. Dedicated Counterclockwise Functionality Toggle (Only Control, Minimalist) */}
-      <div className="absolute top-3 right-3 z-10">
+      <div className="absolute top-2.5 right-3 z-10">
         <button
           type="button"
           onClick={() => setIsCounterClockwise((prev) => !prev)}
-          className={`px-3 py-1.5 rounded-full border text-[11px] font-mono tracking-wider transition-all duration-200 cursor-pointer select-none flex items-center gap-1.5 shadow-xs ${isCounterClockwise
-              ? 'bg-primary-container text-on-primary-container font-semibold border-primary-container shadow-[0_0_12px_rgba(255,154,46,0.35)]'
-              : 'bg-surface/90 hover:bg-surface text-on-surface border-outline-variant/50 hover:border-outline-variant'
-            }`}
+          className={`px-2.5 py-1 rounded-full border text-[10px] font-mono tracking-wider transition-all duration-200 cursor-pointer select-none flex items-center gap-1.5 shadow-xs ${
+            isCounterClockwise
+              ? 'bg-primary-container text-on-primary-container font-semibold border-primary-container shadow-[0_0_10px_rgba(255,154,46,0.3)]'
+              : 'bg-surface/90 hover:bg-surface text-on-surface-variant hover:text-on-surface border-outline-variant/30 hover:border-outline-variant/60'
+          }`}
           title={isCounterClockwise ? 'Switch to Clockwise rotation' : 'Switch to Counterclockwise rotation'}
         >
-          <span className="text-xs transition-transform duration-300 inline-block">
+          <span className="text-[11px] transition-transform duration-300 inline-block">
             {isCounterClockwise ? '⟳' : '⟲'}
           </span>
           <span>{isCounterClockwise ? 'CLOCKWISE' : 'COUNTERCLOCKWISE'}</span>
@@ -447,7 +448,7 @@ const SettingsGearMechanism = () => {
       {/* 2. Pure Visual Gear Mechanism Canvas */}
       <div
         ref={containerRef}
-        className="relative w-full h-[132px] sm:h-[142px] overflow-hidden select-none"
+        className="relative w-full h-[100px] sm:h-[116px] overflow-hidden select-none"
       >
         <canvas ref={canvasRef} className="w-full h-full block" />
       </div>
