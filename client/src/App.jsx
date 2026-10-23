@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
 import PaperList from './pages/PaperList';
@@ -120,9 +120,38 @@ function App() {
   const [toast, setToast] = useState(null); // { type: 'success' | 'error' | 'info', title: string, message: string }
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const userMenuRef = useRef(null);
+
+  // Close user dropdown menu when clicking outside or pressing Escape
+  useEffect(() => {
+    if (!showUserMenu) return;
+
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setShowUserMenu(false);
+      }
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setShowUserMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [showUserMenu]);
 
   // Core navigation function that writes to browser history
   const navigate = useCallback((nextView, options = {}) => {
+    setShowUserMenu(false);
     const { paperId = null, tab = 'summary', replace = false } = options;
     const path = getPathForView(nextView, paperId, tab);
 
@@ -394,7 +423,7 @@ function App() {
                   </button>
 
                   {/* Researcher Node Badge with Dropdown */}
-                  <div className="relative">
+                  <div className="relative" ref={userMenuRef}>
                     <button
                       onClick={() => setShowUserMenu(!showUserMenu)}
                       className="flex items-center gap-2 border border-outline-variant/40 bg-surface-container rounded-full px-3 py-1 text-counter-mono text-[11px] hover:bg-surface-container-high transition-all cursor-pointer text-on-surface"
