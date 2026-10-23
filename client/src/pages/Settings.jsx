@@ -467,7 +467,7 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
   ];
 
   return (
-    <div className="max-w-[1080px] mx-auto px-6 sm:px-10 py-10 font-sans animate-fade-in space-y-8">
+    <div className="max-w-[1080px] mx-auto px-4 sm:px-10 py-6 sm:py-10 font-sans animate-fade-in space-y-6 sm:space-y-8">
       {/* 1. Breadcrumb Lineage */}
       <div className="flex items-center gap-2 text-xs font-mono text-on-surface-variant uppercase tracking-wider">
         <button
@@ -481,23 +481,23 @@ const Settings = ({ currentUser, onLogout, onUpdateProfile, onBack }) => {
       </div>
 
       {/* 2. Top Header with User Identity Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-6 border-b border-outline-variant/30">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 sm:gap-6 pb-6 border-b border-outline-variant/30">
         <div>
-          <h1 className="font-display text-4xl sm:text-5xl text-on-surface font-medium tracking-tight">
+          <h1 className="font-display text-3xl sm:text-5xl text-on-surface font-medium tracking-tight">
             SETTINGS
           </h1>
-          <p className="text-sm text-on-surface-variant mt-2 max-w-xl">
+          <p className="text-xs sm:text-sm text-on-surface-variant mt-2 max-w-xl">
             Configure your researcher identity, synthesis preferences, and secure data storage.
           </p>
         </div>
 
         {/* User Identity Chip & Logout */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2.5 bg-surface-container-low border border-outline-variant/30 px-3.5 py-1.5 rounded-full text-xs font-mono">
-            <span className="w-6 h-6 rounded-full bg-inverse-surface text-surface flex items-center justify-center font-bold text-[10px]">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-2.5 bg-surface-container-low border border-outline-variant/30 px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-mono">
+            <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-inverse-surface text-surface flex items-center justify-center font-bold text-[9px] sm:text-[10px]">
               {initials}
             </span>
-            <span className="text-on-surface font-medium truncate max-w-[180px]">
+            <span className="text-on-surface font-medium truncate max-w-[130px] sm:max-w-[180px]">
               {email}
             </span>
           </div>

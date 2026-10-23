@@ -159,14 +159,14 @@ const PaperList = ({ onSelectPaper, onAskPaper, onUploadClick, onAuthRequired, s
   const padNum = (n) => String(n).padStart(3, '0');
 
   return (
-    <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-10 animate-fade-in font-sans">
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-10 animate-fade-in font-sans">
       {/* 1. Headline Row */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-outline-variant/30">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6 pb-6 border-b border-outline-variant/30">
         <div>
-          <span className="font-counter-mono text-[10px] tracking-[0.2em] text-secondary uppercase block mb-1">
+          <span className="font-counter-mono text-[9px] sm:text-[10px] tracking-[0.15em] sm:tracking-[0.2em] text-secondary uppercase block mb-1">
             RESEARCH CORPUS // PERSISTENT REPOSITORY
           </span>
-          <h1 className="font-display text-5xl sm:text-7xl text-on-surface leading-[0.92] tracking-tight">
+          <h1 className="font-display text-4xl sm:text-7xl text-on-surface leading-[0.92] tracking-tight break-words">
             YOUR LIBRARY
           </h1>
         </div>
@@ -258,13 +258,13 @@ const PaperList = ({ onSelectPaper, onAskPaper, onUploadClick, onAuthRequired, s
         </div>
 
         {/* Right: Dropdowns + View Switcher + Upload */}
-        <div className="flex items-center gap-3 justify-between lg:justify-end">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 justify-start sm:justify-end w-full lg:w-auto pt-2 lg:pt-0">
           {/* Tag Dropdown */}
           {allTags.length > 0 && (
             <select
               value={selectedTag}
               onChange={(e) => setSelectedTag(e.target.value)}
-              className="bg-transparent border border-outline-variant/40 rounded-full px-3 py-1 font-counter-mono text-[10px] text-on-surface outline-none cursor-pointer"
+              className="bg-transparent border border-outline-variant/40 rounded-full px-2.5 sm:px-3 py-1 font-counter-mono text-[10px] text-on-surface outline-none cursor-pointer"
             >
               <option value="ALL">TAG: ALL</option>
               {allTags.map((tag) => (
@@ -279,7 +279,7 @@ const PaperList = ({ onSelectPaper, onAskPaper, onUploadClick, onAuthRequired, s
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="bg-transparent border border-outline-variant/40 rounded-full px-3 py-1 font-counter-mono text-[10px] text-on-surface outline-none cursor-pointer"
+            className="bg-transparent border border-outline-variant/40 rounded-full px-2.5 sm:px-3 py-1 font-counter-mono text-[10px] text-on-surface outline-none cursor-pointer"
           >
             <option value="NEWEST">SORT: NEWEST ▾</option>
             <option value="OLDEST">SORT: OLDEST ▾</option>
@@ -290,7 +290,7 @@ const PaperList = ({ onSelectPaper, onAskPaper, onUploadClick, onAuthRequired, s
           <div className="flex items-center border border-outline-variant/40 rounded-full p-0.5 font-counter-mono text-[10px]">
             <button
               onClick={() => setViewMode('list')}
-              className={`px-2.5 py-0.5 rounded-full transition-all cursor-pointer ${
+              className={`px-2 sm:px-2.5 py-0.5 rounded-full transition-all cursor-pointer ${
                 viewMode === 'list' ? 'bg-inverse-surface text-on-primary' : 'text-secondary'
               }`}
             >
@@ -298,7 +298,7 @@ const PaperList = ({ onSelectPaper, onAskPaper, onUploadClick, onAuthRequired, s
             </button>
             <button
               onClick={() => setViewMode('grid')}
-              className={`px-2.5 py-0.5 rounded-full transition-all cursor-pointer ${
+              className={`px-2 sm:px-2.5 py-0.5 rounded-full transition-all cursor-pointer ${
                 viewMode === 'grid' ? 'bg-inverse-surface text-on-primary' : 'text-secondary'
               }`}
             >
@@ -309,7 +309,7 @@ const PaperList = ({ onSelectPaper, onAskPaper, onUploadClick, onAuthRequired, s
           {/* Upload Pill */}
           <button
             onClick={onUploadClick}
-            className="inline-flex items-center justify-center font-label-nav text-label-nav text-on-primary bg-inverse-surface hover:bg-primary transition-all duration-200 px-4 py-1.5 rounded-full tracking-[0.1em] uppercase cursor-pointer shadow-sm"
+            className="inline-flex items-center justify-center font-label-nav text-label-nav text-on-primary bg-inverse-surface hover:bg-primary transition-all duration-200 px-3 sm:px-4 py-1.5 rounded-full tracking-[0.1em] uppercase cursor-pointer shadow-sm text-xs"
           >
             + UPLOAD PAPER
           </button>

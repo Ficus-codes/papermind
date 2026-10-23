@@ -319,19 +319,19 @@ function App() {
       {/* 2. Top Broadside Navigation Header (Screen Shell) */}
       {!isAuthScreen && view !== 'landing' && (
         <header className="h-16 bg-surface/90 backdrop-blur-md border-b border-outline-variant/30 sticky top-0 z-40 transition-all">
-          <div className="max-w-[1440px] mx-auto px-6 sm:px-12 h-full flex justify-between items-center">
+          <div className="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-12 h-full flex justify-between items-center">
             {/* Left Brand */}
             <div
               onClick={() => setView(isAuthenticated ? 'home' : 'landing')}
-              className="cursor-pointer group flex items-center gap-2.5"
+              className="cursor-pointer group flex items-center gap-2 sm:gap-2.5"
               title="Return to Research Homepage"
             >
               <PapermindLogo size={24} className="group-hover:scale-105 transition-transform" />
-              <div className="flex items-center gap-1.5 font-counter-mono text-counter-mono text-secondary border border-outline-variant/40 px-2 py-0.5 rounded-sm">
+              <div className="hidden sm:flex items-center gap-1.5 font-counter-mono text-counter-mono text-secondary border border-outline-variant/40 px-2 py-0.5 rounded-sm">
                 <span>[PM-ARCHIVE]</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>
               </div>
-              <span className="font-label-nav text-label-nav text-on-surface uppercase tracking-[0.2em] font-bold group-hover:text-primary transition-colors">
+              <span className="font-label-nav text-label-nav text-on-surface uppercase tracking-[0.15em] sm:tracking-[0.2em] font-bold group-hover:text-primary transition-colors text-xs sm:text-sm">
                 PAPERMIND
               </span>
             </div>
@@ -410,26 +410,29 @@ function App() {
             </nav>
 
             {/* Right Side Utility & Identity */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               {isAuthenticated ? (
                 <>
                   <button
                     onClick={() => setView('upload')}
-                    className={`inline-flex items-center justify-center font-label-nav text-label-nav text-on-primary bg-inverse-surface hover:bg-primary transition-all duration-200 px-4 py-2 rounded-full tracking-[0.1em] uppercase cursor-pointer shadow-sm ${
+                    className={`inline-flex items-center justify-center font-label-nav text-label-nav text-on-primary bg-inverse-surface hover:bg-primary transition-all duration-200 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full tracking-[0.1em] uppercase cursor-pointer shadow-sm text-xs ${
                       view === 'upload' ? 'ring-2 ring-primary-container' : ''
                     }`}
+                    title="Ingest new manuscript into library"
                   >
-                    + UPLOAD PAPER
+                    <span className="hidden sm:inline">+ UPLOAD PAPER</span>
+                    <span className="sm:hidden font-bold">+ UPLOAD</span>
                   </button>
 
                   {/* Researcher Node Badge with Dropdown */}
                   <div className="relative" ref={userMenuRef}>
                     <button
                       onClick={() => setShowUserMenu(!showUserMenu)}
-                      className="flex items-center gap-2 border border-outline-variant/40 bg-surface-container rounded-full px-3 py-1 text-counter-mono text-[11px] hover:bg-surface-container-high transition-all cursor-pointer text-on-surface"
+                      className="flex items-center gap-1.5 sm:gap-2 border border-outline-variant/40 bg-surface-container rounded-full px-2.5 sm:px-3 py-1 text-counter-mono text-[10px] sm:text-[11px] hover:bg-surface-container-high transition-all cursor-pointer text-on-surface"
+                      title={userDisplayName}
                     >
                       <span className="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_8px_#ff9a2e]"></span>
-                      <span className="truncate max-w-[160px]">{userDisplayName}</span>
+                      <span className="truncate max-w-[80px] sm:max-w-[130px] md:max-w-[160px]">{userDisplayName}</span>
                       <span className="text-[10px] text-secondary">▾</span>
                     </button>
 
@@ -499,7 +502,7 @@ function App() {
       )}
 
       {/* 3. Main View Router */}
-      <main className="flex-1 w-full">
+      <main className={`flex-1 w-full ${!isAuthScreen && view !== 'landing' && isAuthenticated ? 'pb-20 md:pb-0' : ''}`}>
         {view === 'landing' && (
           <LandingPage
             onGetStarted={() => setView(isAuthenticated ? 'home' : 'register')}
@@ -632,7 +635,7 @@ function App() {
 
       {/* 4. Global Toast System (Screen 9e01b23ebb304287930c92d580734b31) */}
       {toast && (
-        <div className="fixed bottom-6 right-6 z-50 max-w-sm w-full bg-inverse-surface text-surface rounded-2xl border border-white/15 p-4 shadow-2xl animate-fade-in font-mono text-xs flex items-start gap-3">
+        <div className="fixed bottom-20 md:bottom-6 right-4 left-4 sm:left-auto sm:right-6 z-50 max-w-sm w-auto sm:w-full bg-inverse-surface text-surface rounded-2xl border border-white/15 p-4 shadow-2xl animate-fade-in font-mono text-xs flex items-start gap-3">
           <div
             className={`w-2.5 h-2.5 rounded-full mt-1 shrink-0 ${
               toast.type === 'error'
@@ -653,6 +656,79 @@ function App() {
             <p className="text-xs text-white/85 leading-relaxed font-sans">{toast.message}</p>
           </div>
         </div>
+      )}
+
+      {/* 5. Mobile Bottom Navigation Bar (< 768px for Authenticated Workspaces) */}
+      {!isAuthScreen && view !== 'landing' && isAuthenticated && (
+        <nav
+          aria-label="Mobile Bottom Navigation"
+          className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-surface/95 backdrop-blur-lg border-t border-outline-variant/30 flex items-center justify-around py-1.5 px-2 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] select-none"
+        >
+          <button
+            onClick={() => setView('home')}
+            className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all cursor-pointer ${
+              view === 'home'
+                ? 'text-primary font-bold'
+                : 'text-on-surface-variant hover:text-on-surface'
+            }`}
+          >
+            <span className="text-sm sm:text-base leading-none">⌂</span>
+            <span className="font-counter-mono text-[9px] tracking-wider uppercase mt-1">HOME</span>
+            {view === 'home' && <span className="w-1.5 h-1.5 rounded-full bg-primary-container mt-0.5 shadow-[0_0_4px_#ff9a2e]"></span>}
+          </button>
+
+          <button
+            onClick={() => setView('library')}
+            className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all cursor-pointer ${
+              view === 'library' || view === 'paperDetail'
+                ? 'text-primary font-bold'
+                : 'text-on-surface-variant hover:text-on-surface'
+            }`}
+          >
+            <span className="text-sm sm:text-base leading-none">▤</span>
+            <span className="font-counter-mono text-[9px] tracking-wider uppercase mt-1">LIBRARY</span>
+            {(view === 'library' || view === 'paperDetail') && <span className="w-1.5 h-1.5 rounded-full bg-primary-container mt-0.5 shadow-[0_0_4px_#ff9a2e]"></span>}
+          </button>
+
+          <button
+            onClick={() => setView('chat')}
+            className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all cursor-pointer ${
+              view === 'chat'
+                ? 'text-primary font-bold'
+                : 'text-on-surface-variant hover:text-on-surface'
+            }`}
+          >
+            <span className="text-sm sm:text-base leading-none">💬</span>
+            <span className="font-counter-mono text-[9px] tracking-wider uppercase mt-1">CHAT</span>
+            {view === 'chat' && <span className="w-1.5 h-1.5 rounded-full bg-primary-container mt-0.5 shadow-[0_0_4px_#ff9a2e]"></span>}
+          </button>
+
+          <button
+            onClick={() => setView('graph')}
+            className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all cursor-pointer ${
+              view === 'graph'
+                ? 'text-primary font-bold'
+                : 'text-on-surface-variant hover:text-on-surface'
+            }`}
+          >
+            <span className="text-sm sm:text-base leading-none">☊</span>
+            <span className="font-counter-mono text-[9px] tracking-wider uppercase mt-1">GRAPH</span>
+            {view === 'graph' && <span className="w-1.5 h-1.5 rounded-full bg-primary-container mt-0.5 shadow-[0_0_4px_#ff9a2e]"></span>}
+          </button>
+
+          <button
+            onClick={() => setView('settings')}
+            className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all cursor-pointer ${
+              view === 'settings'
+                ? 'text-primary font-bold'
+                : 'text-on-surface-variant hover:text-on-surface'
+            }`}
+          >
+            <span className="text-sm sm:text-base leading-none">⚙</span>
+            <span className="font-counter-mono text-[9px] tracking-wider uppercase mt-1">CONFIG</span>
+            {view === 'settings' && <span className="w-1.5 h-1.5 rounded-full bg-primary-container mt-0.5 shadow-[0_0_4px_#ff9a2e]"></span>}
+          </button>
+        </nav>
       )}
     </div>
   );

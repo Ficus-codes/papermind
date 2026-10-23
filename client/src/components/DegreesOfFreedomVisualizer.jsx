@@ -167,9 +167,34 @@ const DegreesOfFreedomVisualizer = () => {
       setZoom(parseFloat(newZoom.toFixed(2)));
     };
 
+    const onTouchMove = (e) => {
+      if (!e.touches || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      const rect = container.getBoundingClientRect();
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+
+      const nx = (x / rect.width - 0.5) * 2;
+      const ny = (y / rect.height - 0.5) * 2;
+
+      const physics = physicsRef.current;
+      physics.targetTiltY = nx * 0.7;
+      physics.targetTiltX = ny * 0.5;
+      physics.isHovering = true;
+    };
+
+    const onTouchEnd = () => {
+      const physics = physicsRef.current;
+      physics.targetTiltX = 0;
+      physics.targetTiltY = 0;
+      physics.isHovering = false;
+    };
+
     container.addEventListener('mousemove', onMouseMove);
     container.addEventListener('mouseleave', onMouseLeave);
     container.addEventListener('wheel', onWheel, { passive: false });
+    container.addEventListener('touchmove', onTouchMove, { passive: true });
+    container.addEventListener('touchend', onTouchEnd);
 
     // 3D rotation matrices
     const rotateY = (x, y, z, a) => {
@@ -613,13 +638,15 @@ const DegreesOfFreedomVisualizer = () => {
       container.removeEventListener('mousemove', onMouseMove);
       container.removeEventListener('mouseleave', onMouseLeave);
       container.removeEventListener('wheel', onWheel);
+      container.removeEventListener('touchmove', onTouchMove);
+      container.removeEventListener('touchend', onTouchEnd);
     };
   }, []); // Run continuous animation loop once on mount!
 
   return (
     <div className="w-full bg-surface-container-low border border-outline-variant/30 rounded-2xl overflow-hidden font-sans space-y-0 transition-all shadow-sm">
       {/* 1. Header Toolbar: Mode Switcher [P] / [C], Wheel Mode Toggle, Velocity & Zoom Controls */}
-      <div className="px-6 py-4 bg-surface-container border-b border-outline-variant/30 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+      <div className="px-3 sm:px-6 py-3 sm:py-4 bg-surface-container border-b border-outline-variant/30 flex flex-col xl:flex-row xl:items-center justify-between gap-3 sm:gap-4">
         {/* Left: Mode Title & Dual Mode Pills */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="flex items-center gap-2">
@@ -762,29 +789,29 @@ const DegreesOfFreedomVisualizer = () => {
       {/* 2. Main Interactive 3D Canvas Stage */}
       <div
         ref={containerRef}
-        className="relative w-full h-[400px] md:h-[460px] bg-[#161717] overflow-hidden select-none"
+        className="relative w-full h-[320px] sm:h-[400px] md:h-[460px] bg-[#161717] overflow-hidden select-none"
       >
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full cursor-crosshair z-0" />
 
         {/* Floating Top Telemetry Readout */}
-        <div className="absolute top-4 left-6 z-10 pointer-events-none font-mono text-[10px] text-white/70 space-y-1">
+        <div className="absolute top-2 sm:top-4 left-3 sm:left-6 z-10 pointer-events-none font-mono text-[9px] sm:text-[10px] text-white/70 space-y-1 max-w-[55%] sm:max-w-none">
           {mode === 'P' ? (
             <>
-              <div className="flex items-center gap-2">
-                <span className="text-[#FF9A2E] font-bold text-xs">CLASSICAL RIGID BODY // 6 DEGREES OF FREEDOM</span>
-                <span className="px-1.5 py-0.5 bg-white/10 rounded text-[9px] text-white">f = 3N - k</span>
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                <span className="text-[#FF9A2E] font-bold text-[10px] sm:text-xs">CLASSICAL RIGID BODY // 6 DoF</span>
+                <span className="px-1.5 py-0.5 bg-white/10 rounded text-[8px] sm:text-[9px] text-white">f = 3N - k</span>
               </div>
-              <p className="text-white/40">
+              <p className="text-white/40 hidden sm:block">
                 3 TRANSLATIONAL (Tx, Ty, Tz) + 3 ROTATIONAL (Rx Roll, Ry Pitch, Rz Yaw)
               </p>
             </>
           ) : (
             <>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[#54B9FF] font-bold text-xs">MOLECULAR DYNAMICS // 3N DEGREES OF FREEDOM</span>
-                <span className="px-1.5 py-0.5 bg-white/10 rounded text-[9px] text-white font-mono">N = 3 ATOMS (1×O + 2×H) → 9 DoF</span>
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                <span className="text-[#54B9FF] font-bold text-[10px] sm:text-xs">MOLECULAR DYNAMICS // 3N DoF</span>
+                <span className="px-1.5 py-0.5 bg-white/10 rounded text-[8px] sm:text-[9px] text-white font-mono">N=3 ATOMS → 9 DoF</span>
               </div>
-              <p className="text-white/40">
+              <p className="text-white/40 hidden sm:block">
                 WATER (H₂O): 2 INDIVIDUAL HYDROGEN ATOMS (H) LINKED TO 1 OXYGEN (O) · 3 TRANS + 3 ROT + 3 VIBRATIONAL MODES
               </p>
             </>
@@ -792,20 +819,20 @@ const DegreesOfFreedomVisualizer = () => {
         </div>
 
         {/* Floating Right Mode Inspector Filter */}
-        <div className="absolute top-4 right-6 z-20 font-mono text-[10px]">
+        <div className="absolute top-2 sm:top-4 right-2 sm:right-6 z-20 font-mono text-[9px] sm:text-[10px] scale-90 sm:scale-100 origin-top-right">
           {mode === 'P' ? (
-            <div className="bg-black/60 backdrop-blur-md border border-white/15 p-2.5 rounded-xl space-y-1 text-white">
-              <span className="text-[#888888] block text-[9px] uppercase font-bold">ISOLATE DOF</span>
+            <div className="bg-black/60 backdrop-blur-md border border-white/15 p-2 sm:p-2.5 rounded-xl space-y-1 text-white">
+              <span className="text-[#888888] block text-[8px] sm:text-[9px] uppercase font-bold">ISOLATE DOF</span>
               <div className="flex gap-1">
                 {[
                   { id: 'ALL', label: 'FULL 6 DoF' },
-                  { id: 'TRANS', label: 'TRANSLATION (3)' },
-                  { id: 'ROT', label: 'ROTATION (3)' },
+                  { id: 'TRANS', label: 'TRANS (3)' },
+                  { id: 'ROT', label: 'ROT (3)' },
                 ].map((item) => (
                   <button
                     key={item.id}
                     onClick={() => setActivePhysSubmode(item.id)}
-                    className={`px-2 py-1 rounded cursor-pointer transition-colors ${
+                    className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded cursor-pointer transition-colors text-[9px] sm:text-[10px] ${
                       activePhysSubmode === item.id
                         ? 'bg-[#FF9A2E] text-black font-bold'
                         : 'border border-white/20 text-white/70 hover:bg-white/10'
@@ -817,19 +844,19 @@ const DegreesOfFreedomVisualizer = () => {
               </div>
             </div>
           ) : (
-            <div className="bg-black/60 backdrop-blur-md border border-white/15 p-2.5 rounded-xl space-y-1 text-white">
-              <span className="text-[#888888] block text-[9px] uppercase font-bold">NORMAL VIBRATIONAL MODES</span>
-              <div className="flex flex-wrap gap-1 max-w-[280px]">
+            <div className="bg-black/60 backdrop-blur-md border border-white/15 p-2 sm:p-2.5 rounded-xl space-y-1 text-white">
+              <span className="text-[#888888] block text-[8px] sm:text-[9px] uppercase font-bold">VIBRATIONAL MODES</span>
+              <div className="flex flex-wrap gap-1 max-w-[220px] sm:max-w-[280px]">
                 {[
-                  { id: 'ALL', label: 'ALL 3N-6 MODES' },
-                  { id: 'SYM_STRETCH', label: 'ν₁ SYM STRETCH' },
-                  { id: 'BEND', label: 'ν₂ SCISSOR BEND' },
-                  { id: 'ASYM_STRETCH', label: 'ν₃ ASYM STRETCH' },
+                  { id: 'ALL', label: 'ALL MODES' },
+                  { id: 'SYM_STRETCH', label: 'ν₁ SYM' },
+                  { id: 'BEND', label: 'ν₂ BEND' },
+                  { id: 'ASYM_STRETCH', label: 'ν₃ ASYM' },
                 ].map((item) => (
                   <button
                     key={item.id}
                     onClick={() => setActiveChemSubmode(item.id)}
-                    className={`px-2 py-1 rounded cursor-pointer transition-colors ${
+                    className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded cursor-pointer transition-colors text-[9px] sm:text-[10px] ${
                       activeChemSubmode === item.id
                         ? 'bg-[#54B9FF] text-black font-bold'
                         : 'border border-white/20 text-white/70 hover:bg-white/10'
@@ -844,11 +871,11 @@ const DegreesOfFreedomVisualizer = () => {
         </div>
 
         {/* Floating Bottom-Right Canvas HUD: Quick Zoom Controls & Wheel Mode Indicator */}
-        <div className="absolute bottom-3 right-6 z-20 flex items-center gap-2 bg-black/75 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-xl font-mono text-[10px] text-white shadow-lg">
+        <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-6 z-20 flex items-center gap-1.5 sm:gap-2 bg-black/75 backdrop-blur-md border border-white/15 px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl font-mono text-[9px] sm:text-[10px] text-white shadow-lg scale-90 sm:scale-100 origin-bottom-right">
           {/* Wheel Mode Quick Toggle Pill */}
           <button
             onClick={() => setWheelZoomEnabled(!wheelZoomEnabled)}
-            className={`px-2.5 py-0.5 rounded-full text-[9px] font-bold cursor-pointer transition-all flex items-center gap-1.5 ${
+            className={`px-2 py-0.5 rounded-full text-[8px] sm:text-[9px] font-bold cursor-pointer transition-all flex items-center gap-1 ${
               wheelZoomEnabled
                 ? 'bg-primary-container text-black shadow-xs font-extrabold'
                 : 'bg-white/15 text-white/80 hover:bg-white/25 hover:text-white'
@@ -860,7 +887,7 @@ const DegreesOfFreedomVisualizer = () => {
             }
           >
             <span className={`w-1.5 h-1.5 rounded-full ${wheelZoomEnabled ? 'bg-black' : 'bg-green-400'}`} />
-            <span>{wheelZoomEnabled ? 'WHEEL: ZOOM 3D' : 'WHEEL: SCROLL PAGE'}</span>
+            <span>{wheelZoomEnabled ? 'ZOOM 3D' : 'SCROLL'}</span>
           </button>
 
           <span className="text-white/20">|</span>
@@ -872,7 +899,7 @@ const DegreesOfFreedomVisualizer = () => {
           >
             −
           </button>
-          <span className="text-primary-container font-bold w-11 text-center font-mono">
+          <span className="text-primary-container font-bold w-9 sm:w-11 text-center font-mono text-[9px] sm:text-[10px]">
             {Math.round(zoom * 100)}%
           </span>
           <button
@@ -884,7 +911,7 @@ const DegreesOfFreedomVisualizer = () => {
           </button>
           <button
             onClick={() => handleZoomChange(1.0)}
-            className="px-2 py-0.5 rounded bg-white/10 hover:bg-white/25 text-[9px] cursor-pointer text-white/80 transition-colors"
+            className="px-1.5 sm:px-2 py-0.5 rounded bg-white/10 hover:bg-white/25 text-[8px] sm:text-[9px] cursor-pointer text-white/80 transition-colors"
             title="Reset Zoom to 100%"
           >
             RESET
@@ -892,7 +919,7 @@ const DegreesOfFreedomVisualizer = () => {
         </div>
 
         {/* Bottom Left Guidance Pill */}
-        <div className="absolute bottom-3 left-6 z-10 font-mono text-[9px] text-[#888888] pointer-events-none">
+        <div className="hidden md:block absolute bottom-3 left-6 z-10 font-mono text-[9px] text-[#888888] pointer-events-none">
           <span>DRAG TO ORIENT · {wheelZoomEnabled ? 'MOUSE WHEEL ZOOMS 3D' : 'MOUSE WHEEL SCROLLS PAGE (DEFAULT)'} ({Math.round(zoom * 100)}%) · 60 FPS</span>
         </div>
       </div>

@@ -47,6 +47,7 @@ const LibraryChat = ({
   const [copiedMessageIndex, setCopiedMessageIndex] = useState(null);
   const [copiedCitationKey, setCopiedCitationKey] = useState(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [mobileTab, setMobileTab] = useState('chat'); // 'threads' | 'chat' | 'sources'
 
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
@@ -401,6 +402,9 @@ const LibraryChat = ({
       if (match.paperTitle) {
         setExpandedPaper(match.paperTitle);
       }
+      if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+        setMobileTab('sources');
+      }
       // Scroll source into view in right panel
       const refKey = `${match.paperTitle}_${match.pageNumber}_${match.chunkIndex}`;
       if (sourceRefs.current[refKey]) {
@@ -433,7 +437,7 @@ const LibraryChat = ({
   const focusedPaper = papers.find((p) => p._id === selectedPaperId);
 
   return (
-    <div className="h-[calc(100vh-64px)] flex flex-col overflow-hidden max-w-[1600px] mx-auto px-4 sm:px-6 py-4 font-sans text-on-surface">
+    <div className="h-[calc(100dvh-64px-56px)] md:h-[calc(100vh-64px)] flex flex-col overflow-hidden max-w-[1600px] mx-auto px-2 sm:px-6 py-2 sm:py-4 font-sans text-on-surface">
       {/* 1. TOP HEADER & BREADCRUMB BAR */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-3 border-b border-outline-variant/30 shrink-0">
         <div className="flex items-center gap-3 flex-wrap">
@@ -508,11 +512,45 @@ const LibraryChat = ({
         </div>
       </div>
 
+      {/* Mobile Tab Switcher (< lg) */}
+      <div className="flex lg:hidden items-center justify-between p-1 bg-surface-container-high rounded-full border border-outline-variant/40 mt-2 mb-1 shrink-0">
+        <button
+          onClick={() => setMobileTab('threads')}
+          className={`flex-1 py-1.5 px-2 rounded-full font-counter-mono text-[10px] font-bold tracking-wider uppercase transition-all cursor-pointer text-center ${
+            mobileTab === 'threads'
+              ? 'bg-inverse-surface text-on-primary shadow-xs'
+              : 'text-on-surface-variant hover:text-on-surface'
+          }`}
+        >
+          THREADS ({recentChats.length})
+        </button>
+        <button
+          onClick={() => setMobileTab('chat')}
+          className={`flex-1 py-1.5 px-2 rounded-full font-counter-mono text-[10px] font-bold tracking-wider uppercase transition-all cursor-pointer text-center ${
+            mobileTab === 'chat'
+              ? 'bg-inverse-surface text-on-primary shadow-xs'
+              : 'text-on-surface-variant hover:text-on-surface'
+          }`}
+        >
+          CHAT
+        </button>
+        <button
+          onClick={() => setMobileTab('sources')}
+          className={`flex-1 py-1.5 px-2 rounded-full font-counter-mono text-[10px] font-bold tracking-wider uppercase transition-all cursor-pointer text-center ${
+            mobileTab === 'sources'
+              ? 'bg-inverse-surface text-on-primary shadow-xs'
+              : 'text-on-surface-variant hover:text-on-surface'
+          }`}
+        >
+          EVIDENCE ({allSources.length})
+        </button>
+      </div>
+
       {/* 2. MAIN 3-COLUMN WORKSPACE GRID */}
-      <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-4 pt-3 pb-1 overflow-hidden">
+      <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-4 pt-2 pb-1 overflow-hidden">
         
         {/* LEFT RAIL: SAVED SESSIONS & ARCHIVE (lg:col-span-3) */}
-        <div className="lg:col-span-3 h-full flex flex-col overflow-hidden bg-surface-container-low rounded-xl border border-outline-variant/30">
+        <div className={`${mobileTab === 'threads' ? 'flex' : 'hidden'} lg:flex lg:col-span-3 h-full flex-col overflow-hidden bg-surface-container-low rounded-xl border border-outline-variant/30`}>
           {/* Header */}
           <div className="p-3.5 pb-2.5 border-b border-outline-variant/30 flex justify-between items-center shrink-0">
             <div className="flex items-center gap-1.5">
@@ -603,7 +641,7 @@ const LibraryChat = ({
         </div>
 
         {/* CENTER PANE: CONVERSATION STREAM (lg:col-span-5) */}
-        <div className="lg:col-span-5 h-full flex flex-col overflow-hidden bg-surface rounded-xl border border-outline-variant/30 shadow-xs">
+        <div className={`${mobileTab === 'chat' ? 'flex' : 'hidden'} lg:flex lg:col-span-5 h-full flex-col overflow-hidden bg-surface rounded-xl border border-outline-variant/30 shadow-xs`}>
           
           {/* Scope indicator strip */}
           <div className="px-4 py-2 border-b border-outline-variant/20 flex justify-between items-center text-xs font-mono shrink-0 bg-surface-container-lowest">
@@ -811,7 +849,7 @@ const LibraryChat = ({
         </div>
 
         {/* RIGHT PANEL: EVIDENTIARY SOURCES (lg:col-span-4) */}
-        <div className="lg:col-span-4 h-full flex flex-col overflow-hidden bg-[#181919] border border-white/10 rounded-xl text-[#e3e2e2] shadow-sm">
+        <div className={`${mobileTab === 'sources' ? 'flex' : 'hidden'} lg:flex lg:col-span-4 h-full flex-col overflow-hidden bg-[#181919] border border-white/10 rounded-xl text-[#e3e2e2] shadow-sm`}>
           {/* Header */}
           <div className="p-3.5 pb-2.5 border-b border-white/10 flex justify-between items-center shrink-0">
             <div className="flex items-center gap-1.5 font-counter-mono text-[10px] text-white/60 uppercase font-semibold">

@@ -139,9 +139,32 @@
     letter-spacing: -0.03em;
     font-weight: 600;
   }
+
+  /* Utility to hide scrollbars on mobile tabs */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 @layer base {
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    -webkit-text-size-adjust: 100%;
+  }
+  #root {
+    overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
+    min-height: 100vh;
+  }
   body {
     background-color: var(--color-canvas);
     color: var(--color-text-primary);

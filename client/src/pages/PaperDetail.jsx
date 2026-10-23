@@ -188,25 +188,25 @@ ${cText}
   const pageCount = paper.pages?.length || 1;
 
   return (
-    <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-8 animate-fade-in font-sans space-y-8">
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-8 animate-fade-in font-sans space-y-6 sm:space-y-8">
       {/* 1. Breadcrumb */}
       <div className="flex items-center gap-2 text-xs font-mono-counter text-on-surface-variant">
         <button onClick={onBack} className="hover:text-on-surface cursor-pointer">
           LIBRARY
         </button>
         <span>/</span>
-        <span className="text-on-surface font-semibold uppercase truncate max-w-lg">
+        <span className="text-on-surface font-semibold uppercase truncate max-w-[200px] sm:max-w-lg">
           {paper.title}
         </span>
       </div>
 
       {/* 2. Headline & Metadata */}
       <div className="space-y-3 pb-6 border-b border-outline-variant/30">
-        <h1 className="font-display text-4xl sm:text-5xl lg:text-[56px] text-on-surface leading-[0.95] tracking-tight">
+        <h1 className="font-display text-3xl sm:text-5xl lg:text-[56px] text-on-surface leading-[0.95] tracking-tight break-words">
           {paper.title}
         </h1>
 
-        <div className="flex flex-wrap items-center gap-4 text-xs font-mono-counter text-on-surface-variant pt-1">
+        <div className="flex flex-wrap items-center gap-2.5 sm:gap-4 text-xs font-mono-counter text-on-surface-variant pt-1">
           {paper.authors && paper.authors.length > 0 && (
             <span>BY {paper.authors.join(', ')}</span>
           )}
@@ -244,7 +244,7 @@ ${cText}
       )}
 
       {/* 3. Underlined Tab Bar: SUMMARY · SPLIT READER · ASK THIS PAPER · RELATED · NOTES */}
-      <div className="flex border-b border-outline-variant/30 space-x-8 overflow-x-auto">
+      <div className="flex border-b border-outline-variant/30 space-x-4 sm:space-x-8 overflow-x-auto no-scrollbar pb-px">
         {[
           { id: 'summary', label: 'SUMMARY' },
           { id: 'reader', label: '📖 SPLIT READER' },

@@ -295,8 +295,33 @@ const HeroResearchMesh = ({ onExploreClick }) => {
       }
     };
 
+    const onTouchMove = (e) => {
+      if (!e.touches || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      const rect = container.getBoundingClientRect();
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+
+      const nx = (x / rect.width - 0.5) * 2;
+      const ny = (y / rect.height - 0.5) * 2;
+
+      const physics = physicsRef.current;
+      physics.targetTiltY = nx * 0.9;
+      physics.targetTiltX = ny * 0.6;
+      physics.isHovering = true;
+    };
+
+    const onTouchEnd = () => {
+      const physics = physicsRef.current;
+      physics.targetTiltX = 0;
+      physics.targetTiltY = 0;
+      physics.isHovering = false;
+    };
+
     container.addEventListener('mousemove', onMouseMove);
     container.addEventListener('mouseleave', onMouseLeave);
+    container.addEventListener('touchmove', onTouchMove, { passive: true });
+    container.addEventListener('touchend', onTouchEnd);
 
     // 3D rotation matrices
     const rotateY = (x, y, z, a) => {
@@ -528,13 +553,15 @@ const HeroResearchMesh = ({ onExploreClick }) => {
       window.removeEventListener('resize', handleResize);
       container.removeEventListener('mousemove', onMouseMove);
       container.removeEventListener('mouseleave', onMouseLeave);
+      container.removeEventListener('touchmove', onTouchMove);
+      container.removeEventListener('touchend', onTouchEnd);
     };
   }, [baseGeometry]);
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-full min-h-[580px] lg:min-h-[640px] bg-[#141515] overflow-hidden select-none font-sans flex flex-col justify-between"
+      className="relative w-full h-full min-h-[500px] sm:min-h-[580px] lg:min-h-[640px] bg-[#141515] overflow-hidden select-none font-sans flex flex-col justify-between"
     >
       {/* 1. Canvas Layer (Interactive 3D Knowledge Mesh) */}
       <canvas
@@ -543,31 +570,31 @@ const HeroResearchMesh = ({ onExploreClick }) => {
       />
 
       {/* 2. Top Telemetry Bar */}
-      <div className="relative z-10 w-full p-6 sm:px-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-white/10 bg-gradient-to-b from-[#141515]/90 to-transparent backdrop-blur-xs font-mono text-[11px]">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-black/40 border border-white/15 text-[#f1f0f0]">
+      <div className="relative z-10 w-full p-3 sm:p-6 sm:px-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-3 border-b border-white/10 bg-gradient-to-b from-[#141515]/90 to-transparent backdrop-blur-xs font-mono text-[10px] sm:text-[11px]">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded bg-black/40 border border-white/15 text-[#f1f0f0]">
             <span className="w-2 h-2 rounded-full bg-[#FF9A2E] animate-pulse shadow-[0_0_8px_#ff9a2e]" />
-            <span className="font-bold tracking-wider uppercase">LATTICE // 12 SEMINAL EMPIRICAL LAWS</span>
+            <span className="font-bold tracking-wider uppercase">LATTICE // 12 LAWS</span>
           </div>
           <span className="text-[#888888] hidden md:inline">1536-DIM TOPOLOGY</span>
         </div>
 
-        <div className="flex items-center gap-3 text-[#aaaaaa]">
+        <div className="flex items-center gap-2 sm:gap-3 text-[#aaaaaa]">
           <button
             onClick={() => setRotationSpeed((s) => (s === 1 ? 0.4 : s === 0.4 ? 2 : 1))}
-            className="hover:text-white transition-colors cursor-pointer border border-white/15 rounded px-2.5 py-1 bg-black/40"
+            className="hover:text-white transition-colors cursor-pointer border border-white/15 rounded px-2 py-0.5 sm:px-2.5 sm:py-1 bg-black/40"
             title="Adjust rotational velocity"
           >
             VELOCITY: {rotationSpeed === 1 ? '1.0× NORMAL' : rotationSpeed === 0.4 ? '0.4× DAMPED' : '2.0× ORBIT'}
           </button>
           <span className="hidden sm:inline text-white/30">|</span>
-          <span className="hidden sm:inline text-[#888888]">DRAG CURSOR TO ORIENT LATTICE</span>
+          <span className="hidden sm:inline text-[#888888]">DRAG TO ORIENT</span>
         </div>
       </div>
 
       {/* 3. Floating Interactive Research Curiosity Telemetry Capsule (Center/Bottom Left) */}
-      <div className="relative z-20 px-6 sm:px-10 py-6 max-w-xl w-full">
-        <div className="bg-[#1b1c1c]/95 backdrop-blur-md border border-white/20 rounded-2xl p-6 sm:p-7 shadow-2xl space-y-4 font-sans animate-fade-in transition-all">
+      <div className="relative z-20 px-3 sm:px-6 sm:px-10 py-3 sm:py-6 max-w-xl w-full">
+        <div className="bg-[#1b1c1c]/95 backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-7 shadow-2xl space-y-3 sm:space-y-4 font-sans animate-fade-in transition-all">
           {/* Header Row: Empirical Tag & Node Counter */}
           <div className="flex items-center justify-between font-mono text-xs pb-3 border-b border-white/10">
             <div className="flex items-center gap-2">

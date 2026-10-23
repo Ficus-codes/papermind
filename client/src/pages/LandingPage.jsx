@@ -64,12 +64,12 @@ const LandingPage = ({
       <header className="fixed top-0 left-0 right-0 w-full z-50 bg-surface/90 backdrop-blur-md border-b border-outline-variant/30">
         <div className="h-16 max-w-[1440px] mx-auto px-margin-mobile md:px-margin flex items-center justify-between">
           {/* Brand */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2 sm:gap-2.5">
             <PapermindLogo size={24} className="hover:scale-105 transition-transform" />
-            <span className="font-counter-mono text-counter-mono text-secondary tracking-widest">[PM-ARCHIVE]</span>
+            <span className="hidden sm:inline-block font-counter-mono text-counter-mono text-secondary tracking-widest">[PM-ARCHIVE]</span>
             <a
               onClick={(e) => scrollToSection(e, 'main')}
-              className="font-label-nav text-label-nav text-on-surface uppercase tracking-[0.2em] font-bold cursor-pointer hover:text-primary transition-colors"
+              className="font-label-nav text-label-nav text-on-surface uppercase tracking-[0.15em] sm:tracking-[0.2em] font-bold cursor-pointer hover:text-primary transition-colors text-xs sm:text-sm"
               data-path="main"
               href="#"
             >
@@ -122,51 +122,45 @@ const LandingPage = ({
           </nav>
 
           {/* Right Action Cluster */}
-          <div className="flex items-center gap-space-lg">
+          <div className="flex items-center gap-2 sm:gap-space-lg">
             {isAuthenticated ? (
               <>
                 <button
                   onClick={() => onViewChange ? onViewChange('library') : onGetStarted && onGetStarted()}
-                  className="font-label-nav text-label-nav text-on-surface-variant hover:text-on-surface transition-colors uppercase cursor-pointer"
+                  className="hidden sm:inline-block font-label-nav text-label-nav text-on-surface-variant hover:text-on-surface transition-colors uppercase cursor-pointer text-xs"
                 >
                   MY LIBRARY
                 </button>
                 <button
                   onClick={() => onUploadClick ? onUploadClick() : onGetStarted && onGetStarted()}
-                  className="inline-flex items-center justify-center font-label-nav text-label-nav text-on-primary bg-inverse-surface hover:bg-primary transition-all duration-200 px-space-lg py-space-sm rounded-full tracking-[0.1em] uppercase cursor-pointer shadow-sm hover:shadow"
+                  className="inline-flex items-center justify-center font-label-nav text-label-nav text-on-primary bg-inverse-surface hover:bg-primary transition-all duration-200 px-3 sm:px-space-lg py-1.5 sm:py-space-sm rounded-full tracking-[0.1em] uppercase cursor-pointer shadow-sm text-xs"
                 >
-                  UPLOAD PAPER
+                  UPLOAD
                 </button>
                 <div
                   onClick={() => onViewChange ? onViewChange('settings') : onGetStarted && onGetStarted()}
-                  className="w-8 h-8 rounded-full bg-primary flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity"
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-primary flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity"
                   title={currentUser?.email || 'Active Researcher'}
                 >
-                  <span className="material-symbols-outlined text-on-primary text-[18px]">person</span>
+                  <span className="material-symbols-outlined text-on-primary text-[16px] sm:text-[18px]">person</span>
                 </div>
               </>
             ) : (
               <>
                 <button
                   onClick={onLoginClick}
-                  className="font-label-nav text-label-nav text-on-surface-variant hover:text-on-surface transition-colors uppercase cursor-pointer"
+                  className="font-label-nav text-label-nav text-on-surface-variant hover:text-on-surface transition-colors uppercase cursor-pointer text-xs px-1 sm:px-2"
                   data-path="login"
                 >
                   LOGIN
                 </button>
                 <button
                   onClick={onGetStarted}
-                  className="inline-flex items-center justify-center font-label-nav text-label-nav text-on-primary bg-inverse-surface hover:bg-primary transition-all duration-200 px-space-lg py-space-sm rounded-full tracking-[0.1em] uppercase cursor-pointer shadow-sm hover:shadow"
+                  className="inline-flex items-center justify-center font-label-nav text-label-nav text-on-primary bg-inverse-surface hover:bg-primary transition-all duration-200 px-3 sm:px-space-lg py-1.5 sm:py-space-sm rounded-full tracking-[0.1em] uppercase cursor-pointer shadow-sm text-xs"
                   data-path="signup"
                 >
                   GET STARTED
                 </button>
-                <div
-                  onClick={onLoginClick}
-                  className="w-8 h-8 rounded-full bg-primary flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity"
-                >
-                  <span className="material-symbols-outlined text-on-primary text-[18px]">person</span>
-                </div>
               </>
             )}
           </div>

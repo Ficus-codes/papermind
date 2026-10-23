@@ -192,7 +192,7 @@ const UploadPaper = ({ onAuthRequired, onUploadComplete, onViewPaper, onCancel }
   };
 
   return (
-    <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-10 animate-fade-in font-sans">
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-10 animate-fade-in font-sans">
       {/* 0. Breadcrumb Navigation */}
       <div className="flex items-center gap-2 text-xs font-mono text-on-surface-variant mb-6 uppercase tracking-wider">
         <button
@@ -208,23 +208,23 @@ const UploadPaper = ({ onAuthRequired, onUploadComplete, onViewPaper, onCancel }
       </div>
 
       {/* 1. Header Section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-outline-variant/30 mb-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6 pb-6 border-b border-outline-variant/30 mb-6 sm:mb-8">
         <div>
-          <span className="font-counter-mono text-[10px] tracking-[0.2em] text-secondary uppercase block mb-1">
+          <span className="font-counter-mono text-[9px] sm:text-[10px] tracking-[0.15em] sm:tracking-[0.2em] text-secondary uppercase block mb-1">
             ARCHIVE INGESTION // PIPELINE V2.4
           </span>
-          <h1 className="font-display text-5xl sm:text-7xl text-on-surface leading-[0.92] tracking-tight">
+          <h1 className="font-display text-4xl sm:text-7xl text-on-surface leading-[0.92] tracking-tight break-words">
             ADD A PAPER
           </h1>
-          <p className="text-xs text-on-surface-variant mt-2 font-mono">
+          <p className="text-[11px] sm:text-xs text-on-surface-variant mt-2 font-mono">
             PDF &amp; LATEX (.TEX) EXTRACTION · 1536-DIM VECTOR COMMIT · DETERMINISTIC SUMMARY GENERATION
           </p>
         </div>
 
-        <div className="font-counter-mono text-xs text-secondary text-right space-y-1">
-          <div className="flex items-center gap-2 justify-end">
+        <div className="font-counter-mono text-xs text-secondary text-left md:text-right space-y-1">
+          <div className="flex items-center gap-2 justify-start md:justify-end">
             <span className="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_6px_#ff9a2e]" />
-            <span className="font-semibold text-on-surface">
+            <span className="font-semibold text-on-surface text-[11px] sm:text-xs">
               SLOT 015 / 100 // ACTIVE INGESTION
             </span>
           </div>
@@ -235,9 +235,9 @@ const UploadPaper = ({ onAuthRequired, onUploadComplete, onViewPaper, onCancel }
       </div>
 
       {/* 2. Main Ingestion Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
         {/* Left Column (8 cols): Dropzone & Roadmap Stepper */}
-        <div className="lg:col-span-8 space-y-8">
+        <div className="lg:col-span-8 space-y-6 sm:space-y-8">
           {/* Dropzone with 1px dashed hairline */}
           <div
             onDragOver={(e) => {
@@ -246,7 +246,7 @@ const UploadPaper = ({ onAuthRequired, onUploadComplete, onViewPaper, onCancel }
             }}
             onDragLeave={() => setIsDragOver(false)}
             onDrop={handleDrop}
-            className={`p-12 sm:p-16 text-center rounded-2xl transition-all border border-dashed ${
+            className={`p-6 sm:p-16 text-center rounded-2xl transition-all border border-dashed ${
               isDragOver
                 ? 'border-primary-container bg-primary-container/10'
                 : 'border-outline-variant/60 bg-surface-container hover:bg-surface-container-high'

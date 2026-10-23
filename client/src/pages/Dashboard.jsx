@@ -86,40 +86,40 @@ const Dashboard = ({
   const hasActivity = filteredTimeline.length > 0;
 
   return (
-    <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-10 animate-fade-in font-sans space-y-12">
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-10 animate-fade-in font-sans space-y-8 sm:space-y-12">
       {/* 1. Header Row: Welcome & Personalized Telemetry */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-outline-variant/30">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-5 sm:gap-6 pb-6 border-b border-outline-variant/30">
         <div>
-          <div className="flex items-center gap-2 mb-2 font-mono text-[10px] tracking-[0.2em] text-on-surface-variant uppercase">
+          <div className="flex items-center gap-2 mb-2 font-mono text-[9px] sm:text-[10px] tracking-[0.15em] sm:tracking-[0.2em] text-on-surface-variant uppercase">
             <span className="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_8px_#ff9a2e]"></span>
-            <span>RESEARCH NODE ONLINE // {currentUser?.email || 'e.vance@oxford.ac.uk'}</span>
+            <span className="truncate max-w-[280px] sm:max-w-none">RESEARCH NODE ONLINE // {currentUser?.email || 'e.vance@oxford.ac.uk'}</span>
           </div>
-          <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl text-on-surface leading-[0.92] tracking-tight">
+          <h1 className="font-display text-3xl sm:text-5xl lg:text-7xl text-on-surface leading-[0.95] sm:leading-[0.92] tracking-tight break-words">
             WELCOME BACK, <br className="hidden sm:inline" />
             <span className="text-primary-container">{researcherName}</span>
           </h1>
-          <p className="font-mono text-xs text-on-surface-variant mt-3">
+          <p className="font-mono text-[11px] sm:text-xs text-on-surface-variant mt-2 sm:mt-3 leading-relaxed">
             ZURICH ARCHIVE CLUSTER · ZERO-LEAKAGE LOCAL VECTOR STORE · {new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
         </div>
 
         {/* Global Quick Actions */}
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-2 lg:pt-0">
           <button
             onClick={onGoToUpload}
-            className="btn-primary !h-10 !px-5 !text-[11px] shadow-sm cursor-pointer"
+            className="btn-primary !h-9 sm:!h-10 !px-4 sm:!px-5 !text-[10px] sm:!text-[11px] shadow-sm cursor-pointer"
           >
             + UPLOAD MANUSCRIPT
           </button>
           <button
             onClick={onGoToLibrary}
-            className="btn-ghost !h-10 !px-5 !text-[11px] border border-outline-variant/50 cursor-pointer"
+            className="btn-ghost !h-9 sm:!h-10 !px-4 sm:!px-5 !text-[10px] sm:!text-[11px] border border-outline-variant/50 cursor-pointer"
           >
             OPEN LIBRARY ↗
           </button>
           <button
             onClick={onGoToChat}
-            className="btn-ignition !h-10 !px-5 !text-[11px] cursor-pointer"
+            className="btn-ignition !h-9 sm:!h-10 !px-4 sm:!px-5 !text-[10px] sm:!text-[11px] cursor-pointer"
           >
             SYNTHESIZE CORPUS ↗
           </button>

@@ -29,6 +29,7 @@ const CitationGraph = ({ onSelectPaper, onAskPaper, onAuthRequired }) => {
   const [fps, setFps] = useState(60);
   const [loading, setLoading] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(true);
+  const [panelCollapsed, setPanelCollapsed] = useState(true);
 
   // Mutable animation & physics state in refs (completely avoids React re-renders during 60fps loop)
   const nodesRef = useRef([]);
@@ -772,6 +773,89 @@ const CitationGraph = ({ onSelectPaper, onAskPaper, onAuthRequired }) => {
     interaction.isPanning = false;
   };
 
+  // Touch handlers for mobile devices
+  const handleTouchStart = (e) => {
+    if (!e.touches || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const world = screenToWorld(touch.clientX, touch.clientY);
+    interactionRef.current.clickStartPos = { x: touch.clientX, y: touch.clientY };
+
+    const nodes = nodesRef.current;
+    let hitNode = null;
+    for (let i = nodes.length - 1; i >= 0; i--) {
+      const n = nodes[i];
+      if (n.currentOpacity < 0.2) continue;
+      const dx = n.x - world.x;
+      const dy = n.y - world.y;
+      const hitRadius = n.radius + 14;
+      if (dx * dx + dy * dy <= hitRadius * hitRadius) {
+        hitNode = n;
+        break;
+      }
+    }
+
+    if (hitNode) {
+      interactionRef.current.draggedNode = hitNode;
+      hitNode.pinned = true;
+      hitNode.x = world.x;
+      hitNode.y = world.y;
+      hitNode.vx = 0;
+      hitNode.vy = 0;
+    } else {
+      interactionRef.current.isPanning = true;
+      interactionRef.current.panStart = { x: touch.clientX, y: touch.clientY };
+      interactionRef.current.cameraStart = {
+        x: cameraRef.current.targetX,
+        y: cameraRef.current.targetY,
+      };
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (!e.touches || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const world = screenToWorld(touch.clientX, touch.clientY);
+    const interaction = interactionRef.current;
+    interaction.mousePos = { x: touch.clientX, y: touch.clientY };
+
+    if (interaction.draggedNode) {
+      interaction.draggedNode.x = world.x;
+      interaction.draggedNode.y = world.y;
+      interaction.draggedNode.vx = 0;
+      interaction.draggedNode.vy = 0;
+      return;
+    }
+
+    if (interaction.isPanning) {
+      const dx = touch.clientX - interaction.panStart.x;
+      const dy = touch.clientY - interaction.panStart.y;
+      cameraRef.current.targetX = interaction.cameraStart.x + dx;
+      cameraRef.current.targetY = interaction.cameraStart.y + dy;
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    const interaction = interactionRef.current;
+    const lastTouch = e.changedTouches ? e.changedTouches[0] : null;
+    const clickDistance = lastTouch
+      ? Math.hypot(lastTouch.clientX - interaction.clickStartPos.x, lastTouch.clientY - interaction.clickStartPos.y)
+      : 0;
+
+    if (interaction.draggedNode) {
+      interaction.draggedNode.pinned = false;
+      if (clickDistance < 10) {
+        setSelectedNode(interaction.draggedNode);
+        setDrawerOpen(true);
+      }
+      interaction.draggedNode = null;
+    } else if (interaction.isPanning) {
+      interaction.isPanning = false;
+    }
+  };
+
   // Recenter Camera on Origin
   const recenter = () => {
     cameraRef.current.targetX = 0;
@@ -804,19 +888,33 @@ const CitationGraph = ({ onSelectPaper, onAskPaper, onAuthRequired }) => {
       className="relative w-full h-[calc(100vh-64px)] bg-[#2B2B2B] text-[#F2F2F2] overflow-hidden select-none font-sans"
     >
       {/* 1. Top Center Status & Telemetry */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 text-center pointer-events-none font-mono">
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 text-center pointer-events-none font-mono px-2">
         <span className="text-xs uppercase tracking-[0.2em] text-[#F2F2F2] font-semibold">
           CITATION GRAPH
         </span>
         <p className="text-[10px] text-[#FF9A2E] tracking-wider mt-0.5">
-          NODE CLUSTER: {visibleNodesCount} ACTIVE // {edgesRef.current.length} EDGES · DENSITY 0.74
+          NODE CLUSTER: {visibleNodesCount} ACTIVE // {edgesRef.current.length} EDGES
         </p>
+      </div>
+
+      {/* Mobile Controls Toggle Button (< md) */}
+      <div className="md:hidden absolute top-3 left-3 z-40">
+        <button
+          onClick={() => setPanelCollapsed(!panelCollapsed)}
+          className="bg-[#222222]/90 backdrop-blur-md border border-white/20 text-[#FF9A2E] px-3 py-1.5 rounded-full font-mono text-[10px] font-bold shadow-lg flex items-center gap-1.5 cursor-pointer"
+        >
+          <span>⚙</span>
+          <span>{panelCollapsed ? 'FILTERS' : 'HIDE'}</span>
+        </button>
       </div>
 
       {/* 2. Floating Top-Left Filter & Telemetry Panel (320px) */}
       <div
-        className="absolute top-4 left-6 z-30 w-80 bg-[#222222]/90 backdrop-blur-md border border-white/15 rounded-xl p-4 shadow-2xl font-mono text-xs space-y-3"
+        className={`${
+          panelCollapsed ? 'hidden md:block' : 'block'
+        } absolute top-14 md:top-4 left-3 sm:left-6 z-30 w-[calc(100vw-24px)] sm:w-80 max-w-sm bg-[#222222]/95 backdrop-blur-md border border-white/15 rounded-xl p-4 shadow-2xl font-mono text-xs space-y-3 max-h-[75vh] overflow-y-auto`}
         onMouseDown={(e) => e.stopPropagation()}
+        onTouchStart={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center pb-2 border-b border-white/10 text-[10px] text-[#888888]">
           <span>GRAPH CONTROLS [⌘K]</span>
@@ -918,45 +1016,49 @@ const CitationGraph = ({ onSelectPaper, onAskPaper, onAuthRequired }) => {
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         className="w-full h-full block cursor-grab active:cursor-grabbing touch-none"
       />
 
       {/* 4. Bottom-Left Legend & Navigation Controls */}
       <div
-        className="absolute bottom-8 left-6 z-20 flex flex-col gap-3 font-mono text-[10px]"
+        className="absolute bottom-20 md:bottom-8 left-3 sm:left-6 z-20 flex flex-col gap-2 font-mono text-[9px] sm:text-[10px]"
         onMouseDown={(e) => e.stopPropagation()}
+        onTouchStart={(e) => e.stopPropagation()}
       >
         {/* Legend */}
-        <div className="bg-[#222222]/90 border border-white/15 rounded-xl p-3 space-y-2 backdrop-blur-md">
+        <div className="bg-[#222222]/90 border border-white/15 rounded-xl p-2 sm:p-3 space-y-1.5 sm:space-y-2 backdrop-blur-md">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#FF9A2E] shadow-[0_0_6px_#FF9A2E]" />
-            <span className="text-white">IN YOUR LIBRARY</span>
+            <span className="w-2 h-2 rounded-full bg-[#FF9A2E] shadow-[0_0_6px_#FF9A2E]" />
+            <span className="text-white text-[9px] sm:text-[10px]">IN YOUR LIBRARY</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full border border-white/80 bg-transparent" />
-            <span className="text-[#A0A0A0]">EXTERNAL CITATION</span>
+            <span className="w-2 h-2 rounded-full border border-white/80 bg-transparent" />
+            <span className="text-[#A0A0A0] text-[9px] sm:text-[10px]">EXTERNAL CITATION</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-4 h-[1px] bg-[#FF9A2E]" />
-            <span className="text-[#A0A0A0]">ACTIVE CITATION FLOW</span>
+            <span className="w-3.5 h-[1px] bg-[#FF9A2E]" />
+            <span className="text-[#A0A0A0] text-[9px] sm:text-[10px]">FLOW LINK</span>
           </div>
         </div>
 
         {/* Zoom Controls */}
-        <div className="flex items-center gap-2 bg-[#222222]/90 border border-white/15 rounded-full px-3 py-1.5 backdrop-blur-md">
+        <div className="flex items-center gap-1.5 sm:gap-2 bg-[#222222]/90 border border-white/15 rounded-full px-2.5 sm:px-3 py-1 sm:py-1.5 backdrop-blur-md">
           <button
             onClick={zoomIn}
-            className="hover:text-[#FF9A2E] font-bold px-1.5 cursor-pointer text-xs"
+            className="hover:text-[#FF9A2E] font-bold px-1 cursor-pointer text-xs"
             title="Zoom In"
           >
             +
           </button>
-          <span className="text-[#888888] min-w-[36px] text-center font-mono">
+          <span className="text-[#888888] min-w-[32px] sm:min-w-[36px] text-center font-mono text-[9px] sm:text-[10px]">
             {displayZoom}%
           </span>
           <button
             onClick={zoomOut}
-            className="hover:text-[#FF9A2E] font-bold px-1.5 cursor-pointer text-xs"
+            className="hover:text-[#FF9A2E] font-bold px-1 cursor-pointer text-xs"
             title="Zoom Out"
           >
             -
@@ -964,7 +1066,7 @@ const CitationGraph = ({ onSelectPaper, onAskPaper, onAuthRequired }) => {
           <span className="text-white/20">|</span>
           <button
             onClick={recenter}
-            className="hover:text-[#FF9A2E] px-1.5 cursor-pointer font-mono"
+            className="hover:text-[#FF9A2E] px-1 cursor-pointer font-mono text-[9px] sm:text-[10px]"
             title="Recenter Camera"
           >
             ⌖ RECENTER
@@ -972,11 +1074,12 @@ const CitationGraph = ({ onSelectPaper, onAskPaper, onAuthRequired }) => {
         </div>
       </div>
 
-      {/* 5. Right Paper Inspector Drawer (380px wide) */}
+      {/* 5. Right Paper Inspector Drawer (Responsive on mobile) */}
       {selectedNode && drawerOpen && (
         <div
-          className="absolute top-4 right-6 bottom-8 z-30 w-96 bg-[#222222]/95 border border-white/15 rounded-xl p-6 shadow-2xl flex flex-col justify-between backdrop-blur-md font-sans transition-all duration-200"
+          className="fixed md:absolute inset-x-3 bottom-20 md:bottom-8 md:top-4 md:right-6 md:left-auto md:w-96 z-30 max-h-[72vh] md:max-h-none bg-[#222222]/95 border border-white/15 rounded-xl p-4 sm:p-6 shadow-2xl flex flex-col justify-between backdrop-blur-md font-sans transition-all duration-200"
           onMouseDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
         >
           <div className="space-y-4 overflow-y-auto pr-1">
             {/* Header */}
