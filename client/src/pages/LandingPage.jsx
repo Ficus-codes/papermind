@@ -214,7 +214,7 @@ const LandingPage = ({
             </div>
 
             {/* Bottom Canvas: Architectural Void & Interactive Research Knowledge Lattice */}
-            <div className="w-full bg-[#141515] text-[#f1f0f0] relative min-h-[580px] lg:min-h-[640px] overflow-hidden flex flex-col justify-between m-0 p-0 border-0 border-t border-b border-white/10">
+            <div className="w-full bg-[#141515] text-[#f1f0f0] relative min-h-[660px] sm:min-h-[580px] lg:min-h-[640px] overflow-hidden flex flex-col justify-between m-0 p-0 border-0 border-t border-b border-white/10">
               <HeroResearchMesh
                 onExploreClick={(e) => scrollToSection(e, 'how-it-works')}
               />

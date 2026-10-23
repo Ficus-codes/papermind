@@ -60,9 +60,9 @@ const Login = ({ onLoginSuccess, onSwitchToRegister, onForgotPassword, onBackToL
   return (
     <div className="min-h-screen bg-surface flex flex-col md:flex-row font-sans">
       {/* Left Column (Light Canvas bg-surface) */}
-      <div className="w-full md:w-1/2 p-8 sm:p-14 lg:p-20 flex flex-col justify-between border-r border-outline-variant/30 min-h-[560px]">
+      <div className="w-full md:w-1/2 p-5 sm:p-14 lg:p-20 flex flex-col justify-between border-r border-outline-variant/30 min-h-[560px]">
         {/* Top Minimal Bar */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-4 sm:mb-8">
           <div
             onClick={onBackToLanding}
             className="flex items-center gap-2.5 cursor-pointer group"
@@ -81,13 +81,23 @@ const Login = ({ onLoginSuccess, onSwitchToRegister, onForgotPassword, onBackToL
           </button>
         </div>
 
+        {/* Mobile 3D Amber Sculpture Banner (< md) */}
+        <div className="md:hidden w-full h-[180px] xs:h-[210px] mb-5 rounded-2xl overflow-hidden border border-outline-variant/30 relative bg-[#181818] shadow-md">
+          <WireframeMesh
+            caption="Pick up where you left off."
+            showRing={true}
+            compact={true}
+            height="100%"
+          />
+        </div>
+
         {/* Center Content */}
-        <div className="max-w-md w-full mx-auto my-auto py-6 space-y-8 animate-fade-in">
+        <div className="max-w-md w-full mx-auto my-auto py-2 sm:py-6 space-y-6 sm:space-y-8 animate-fade-in">
           <div className="space-y-2">
             <span className="font-nav-label text-[10px] text-on-surface-variant tracking-widest block">
               AUTHENTICATION
             </span>
-            <h1 className="font-display text-4xl sm:text-5xl text-on-surface">
+            <h1 className="font-display text-3xl sm:text-5xl text-on-surface">
               WELCOME BACK
             </h1>
           </div>
@@ -204,8 +214,8 @@ const Login = ({ onLoginSuccess, onSwitchToRegister, onForgotPassword, onBackToL
         </div>
       </div>
 
-      {/* Right Column (Dark Scene Panel #1b1c1c) */}
-      <div className="w-full md:w-1/2 min-h-[450px] md:min-h-screen">
+      {/* Right Column (Dark Scene Panel #1b1c1c) - Desktop */}
+      <div className="hidden md:block w-full md:w-1/2 min-h-[450px] md:min-h-screen">
         <WireframeMesh
           caption="Pick up where you left off."
           showRing={true}
